@@ -15,4 +15,92 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>
 	</welcome-file-list>
+	
+	   <filter>
+        <filter-name>CORSFilter</filter-name>
+        <filter-class>com.motorola.motoask.CORSFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>CORSFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    
+    <welcome-file-list>
+        <!-- <welcome-file>homepage.jsp</welcome-file> -->
+     <!--    <welcome-file>app/generated.html</welcome-file> -->
+        <welcome-file>index.html</welcome-file>
+    </welcome-file-list>
+    
+        <!--  STUFF FOR GCM -->
+     <listener>
+    <listener-class>
+      com.motorola.motoask.gcm.ApiKeyInitializer
+    </listener-class>
+  </listener>
+
+  <servlet>
+    <servlet-name>RegisterServlet</servlet-name>
+    <servlet-class>
+      com.motorola.motoask.gcm.RegisterServlet
+    </servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>RegisterServlet</servlet-name>
+    <url-pattern>/api/v1/register</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>UnregisterServlet</servlet-name>
+    <servlet-class>
+      com.motorola.motoask.gcm.UnregisterServlet
+    </servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>UnregisterServlet</servlet-name>
+    <url-pattern>api/v1/unregister</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>SendAllMessagesServlet</servlet-name>
+    <servlet-class>
+      com.motorola.motoask.gcm.SendAllMessagesServlet
+    </servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>SendAllMessagesServlet</servlet-name>
+    <url-pattern>/api/v1/pushqueue</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>SendMessageServlet</servlet-name>
+    <servlet-class>
+      com.motorola.motoask.gcm.SendMessageServlet
+    </servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>SendMessageServlet</servlet-name>
+    <url-pattern>/send</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
+    <servlet-name>GCMServlet</servlet-name>
+    <servlet-class>
+      com.motorola.motoask.gcm.HomeServlet
+    </servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>GCMServlet</servlet-name>
+    <url-pattern>/gcm</url-pattern>
+  </servlet-mapping>
+    
 </web-app>
