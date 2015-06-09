@@ -41,9 +41,11 @@ import com.motorola.motoask.Constants;
 public class RegisterServlet extends BaseServlet {
 
     protected static final String PARAMETER_REG_ID = "regId";
-    private static final String PARAMETER_TBD_ID = "tbdId";
+    private static final String PARAMETER_USER_ID = "userId";
     private static final String PARAMETER_EMAIL = "email";
-    private static final String PARAMETER_OS = "os";
+    private static final String PARAMETER_NAME = "name";
+    private static final String PARAMETER_AVATAR = "photo";
+    
     private static final Logger log = Logger.getLogger(RegisterServlet.class.getName());
 
     @Override
@@ -53,15 +55,14 @@ public class RegisterServlet extends BaseServlet {
       
         try {
             regId = getParameter(req, PARAMETER_REG_ID);
-            tbdId = getParameter(req, PARAMETER_TBD_ID);
+            tbdId = getParameter(req, PARAMETER_USER_ID);
             email = getParameter(req, PARAMETER_EMAIL);
-            os = getParameter(req, PARAMETER_OS);
+          
             
-            boolean temp = EnumUtils.isValidEnum(Constants.DEVICE_OS.class, os);
+           // boolean temp = EnumUtils.isValidEnum(Constants.DEVICE_OS.class, os);
             
             if (regId == null || tbdId == null || regId.length() == 0 || tbdId.length() == 0
-                    || email == null || email.length() == 0
-                    || (!EnumUtils.isValidEnum(Constants.DEVICE_OS.class, os))) {
+                    || email == null || email.length() == 0){
                 setFail(resp);
                 jsonResp.put("success", false);
                 jsonResp.put("message", "bad or missing param");
@@ -74,7 +75,7 @@ public class RegisterServlet extends BaseServlet {
         
             
 
-        if (Datastore.register(tbdId, email, regId, os)) {
+        if (Datastore.register(tbdId, email, regId)) {
             setSuccess(resp);
             jsonResp.put("success", true);
             

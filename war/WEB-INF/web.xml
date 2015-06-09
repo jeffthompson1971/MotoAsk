@@ -31,6 +31,17 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
         <welcome-file>index.html</welcome-file>
     </welcome-file-list>
     
+        <!--  STUFF FOR USER(S) -->
+    <servlet>
+        <servlet-name>UserServlet</servlet-name>
+        <servlet-class>com.motorola.motoask.UserServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UserServlet</servlet-name>
+        <url-pattern>/api/v1/*</url-pattern>
+    </servlet-mapping>
+    
+    
         <!--  STUFF FOR GCM -->
      <listener>
     <listener-class>

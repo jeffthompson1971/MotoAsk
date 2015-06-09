@@ -79,7 +79,7 @@ public final class Datastore {
      * @param regId
      *            device's registration id.
      */
-    public static boolean register(String tbdId, String email, String regId, String os) {
+    public static boolean register(String tbdId, String email, String regId) {
         logger.info("Registering device: " + regId + "for user " + email);
 
         int osOrdinal = 0;
@@ -94,9 +94,53 @@ public final class Datastore {
             Transaction txn = datastore.beginTransaction();
             try {
 
-                osOrdinal = Constants.DEVICE_OS.valueOf(os).ordinal();
+              
                 entity = new Entity(DEVICE_ENTITY);
-                entity.setProperty(OS_PROPERTY, osOrdinal);
+               
+                entity.setProperty(EMAIL_PROPERTY, email);
+                entity.setProperty(DEVICE_REG_ID_PROPERTY, regId);
+                entity.setProperty(TBD_ID_PROPERTY, tbdId);
+                entity.setProperty("creationdate", new Date());
+
+                datastore.put(entity);
+                txn.commit();
+
+            } finally {
+                if (txn.isActive()) {
+                    txn.rollback();
+                    success = false;
+                }
+            }
+        }
+        return success;
+    }
+    
+    /**
+     * Registers a device.
+     * 
+     * @param regId
+     *            device's registration id.
+     */
+    public static boolean addUser(String id, String email, String regId, String devInfo, 
+            String photo) {
+        
+        logger.info("Registering device: " + regId + "for user " + email);
+
+        int osOrdinal = 0;
+        boolean success = true;
+        Entity entity = findDeviceByRegId(regId);
+
+        if (entity != null) {
+            logger.info(regId + " is already registered ... ignoring.");
+
+        } else {
+
+            Transaction txn = datastore.beginTransaction();
+            try {
+
+              
+                entity = new Entity(DEVICE_ENTITY);
+               
                 entity.setProperty(EMAIL_PROPERTY, email);
                 entity.setProperty(DEVICE_REG_ID_PROPERTY, regId);
                 entity.setProperty(TBD_ID_PROPERTY, tbdId);
