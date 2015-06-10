@@ -2,7 +2,7 @@ package com.motorola.motoask.qc;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 import java.util.LinkedHashMap;
-
+import com.google.api.services.prediction.*;
 
 public class QClassifier {
 	String mQuestion;
@@ -33,6 +33,16 @@ public class QClassifier {
 	}
 	
 	public void learn(String question, String classification) {
+		// Append training example to file in Cloud Storage
+	}
+	
+	public void cram(String question, String classification) {
+		// Update model on the fly (and store training example to file
+		// in Cloud Storage for later use.
+	}
+	
+	public void trainModel() {
+	    	
 	}
 	
 	public static void main( String args[] ){
