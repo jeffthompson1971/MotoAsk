@@ -35,7 +35,7 @@ public class UserServlet extends HttpServlet {
         users, user
      }
      
-     private String REST_RES_PATTERN = "/(users)$";
+     private String REST_RES_PATTERN = "/(users|user)$";
 
      private String REST_RES_WITH_ID_PATTERN = "/(users|user)/([A-Za-z0-9]*)";
 
