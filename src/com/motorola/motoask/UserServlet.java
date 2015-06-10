@@ -11,6 +11,7 @@ import net.sf.json.JSONObject;
 
 import com.motorola.motoask.RestRequest;
 import com.motorola.motoask.Utils;
+import com.motorola.motoask.gcm.RegisterServlet;
 
 
 
@@ -19,6 +20,17 @@ public class UserServlet extends HttpServlet {
     
     private static final Logger log = Logger.getLogger(UserServlet.class.getName());
     
+    public static final String PARAMETER_REG_ID = "regId"; // string
+    public static final String PARAMETER_USER_ID = "userId";// string
+    public static final String PARAMETER_EMAIL = "email";// string
+    public static final String PARAMETER_NAME = "userName";// string
+    public static final String PARAMETER_AVATAR = "imageUrl";// string
+    public static final String PARAMETER_DEVINFO = "deviceInfo"; //JSON string
+    //public static final String PARAMETER_DEVINFO = "devInfo"; //JSON string
+    
+    
+ 
+
     public static  enum Resource {
         users, user
      }
@@ -128,12 +140,14 @@ public class UserServlet extends HttpServlet {
      }
    
    
-    // curl -X POST -d '{}' localhost:8888/api/v1/users
+    //  curl -X POST -d '{"userName":"Wentao Chang","email":"wchang@motorola.com","regId":"APA91bGw9qM1DXFZjBeBsZ9VKm2GoKjG-Gk_2SfB5eqtMta1l3leNV_bjb6wMGjalQYVSVcoLSiojlHqru59OkCNRsNgP3y6FnYsRa98rvijmtUsdDGKLHECgmnCyd0u8f2U638J_j6Av46D4QP4l9itLLVl-nYR1g","imageUrl":"https:\/\/lh6.googleusercontent.com\/-3bzf0-gdsaQ\/AAAAAAAAAAI\/AAAAAAAAAHs\/EzPegZlcVmA\/photo.jpg?sz=50","userId":"114824279230486482278","deviceInfo":{"imei":"NBVV2F0086","device_model":"XT1585","carrier":""}}' localhost:8888/api/v1/users
     public static JSONObject handlePostToUsers(HttpServletRequest req, HttpServletResponse res) {
 
         JSONObject jsonResp = new JSONObject();
         JSONObject jsonData = new JSONObject();
         
+        
+   
         try {
             jsonData = Utils.getJsonBody(req);
         } catch (IOException e) {
@@ -141,9 +155,25 @@ public class UserServlet extends HttpServlet {
             e.printStackTrace();
         }
         //String userId = restReq.getId()
+        String id = jsonData.getString(PARAMETER_USER_ID);
+        String name = jsonData.getString(PARAMETER_NAME);
+        String email = jsonData.getString(PARAMETER_EMAIL);
+        String photo = jsonData.getString(PARAMETER_AVATAR);
+        String devInfo = jsonData.getString(PARAMETER_DEVINFO);
+        
+        
+        JSONObject devObj = new JSONObject(devInfo);
+        
+        
+        
+        // write this to datastore!
+        
         
         jsonResp.put("success", true);
-        jsonResp.put("message", "POST message body:" + jsonData.toString());
+        jsonResp.put("message", "user added successfully");
+        jsonResp.put("devInfo", devObj.toString());
+        
+        
         return jsonResp;
         
     }
@@ -155,8 +185,6 @@ public class UserServlet extends HttpServlet {
         JSONObject jsonData = new JSONObject();
         
         String userId = resource.getId();
-      
-        //String userId = restReq.getId()
         
         jsonResp.put("success", true);
         jsonResp.put("message", "shoudl be returning data for user:" + userId);
