@@ -46,7 +46,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
     </servlet>
     <servlet-mapping>
         <servlet-name>QuestionServlet</servlet-name>
-        <url-pattern>/api/qanda/questions/v1/*</url-pattern>
+        <url-pattern>/api/question/v1/*</url-pattern>
     </servlet-mapping>
     <servlet>
         <servlet-name>AnswerServlets</servlet-name>
@@ -54,7 +54,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
     </servlet>
     <servlet-mapping>
         <servlet-name>AnswerServlets</servlet-name>
-        <url-pattern>/api/qanda/v1/*</url-pattern>
+        <url-pattern>/api/answer/v1/*</url-pattern>
     </servlet-mapping>
     
     
