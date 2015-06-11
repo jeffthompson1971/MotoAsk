@@ -23,6 +23,7 @@ public class OfyService {
 
 	  static {
 		  ObjectifyService.factory().register(QuestionDataEntity.class);
+		  ObjectifyService.factory().register(AnswerDataEntity.class);
 	  }
 
 	  public static OfyService ofyService = null;
