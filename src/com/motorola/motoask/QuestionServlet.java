@@ -178,7 +178,7 @@ public class QuestionServlet extends HttpServlet {
 
             OfyService ofyService = OfyService.getInstance();
             ofyService.save(questionData);
-            Long qId = questionData.getQuestionId();
+            String qId = questionData.getQuestionId();
             
             jsonResp.put("success", true);
             jsonResp.put(PARAMETER_QID, qId);
