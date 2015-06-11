@@ -46,7 +46,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
     </servlet>
     <servlet-mapping>
         <servlet-name>QuestionServlet</servlet-name>
-        <url-pattern>/api/question/questions/v1/*</url-pattern>
+        <url-pattern>/api/question/v1/*</url-pattern>
     </servlet-mapping>
     <servlet>
         <servlet-name>AnswerServlets</servlet-name>
