@@ -3,6 +3,7 @@ package com.motorola.motoask;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
@@ -14,7 +15,6 @@ import com.google.gson.Gson;
 import com.motorola.motoask.RestRequest;
 import com.motorola.motoask.Utils;
 import com.motorola.motoask.gcm.RegisterServlet;
-import com.sun.xml.internal.bind.v2.schemagen.xmlschema.List;
 
 
 
@@ -29,6 +29,7 @@ public class QuestionServlet extends HttpServlet {
     public static final String PARAMETER_Q = "q"; // string
     public static final String PARAMETER_Q_DETAILS = "qDetails";// string
     public static final String PARAMETER_Q_TOPICS = "qTopics"; 
+    public static final String PARAMETER_Q_STATE = "qState"; 
    
     //public static final String PARAMETER_DEVINFO = "devInfo"; //JSON string
     

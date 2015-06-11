@@ -165,6 +165,34 @@ public final class Datastore {
         }
         return entity;
     }
+    
+    /*
+     * Returns a list of all questions in the specified state.
+     *  
+     * @param sysId - id for the external system
+     * @return - JSONArray of users.
+     */    
+    public static JSONArray getQuestionsInState(String state) {
+        logger.info("getQuestionsInState()");
+        Query query = new Query(Constants.QUESTION_ENTITY_NAME);
+        Filter equalFilter = new FilterPredicate(QuestionServlet.PARAMETER_Q_STATE, FilterOperator.EQUAL,
+                state);
+        query.setFilter(equalFilter);
+        PreparedQuery preparedQuery = datastore.prepare(query);
+        List<Entity> entities = preparedQuery.asList(DEFAULT_FETCH_OPTIONS);
+        int size = entities.size();
+        if (size > 0) {
+            logger.info("Found " + size + " questions in state " + state + ": " + entities);
+        }
+
+        JSONArray retList = new JSONArray();
+        for (Entity entity : entities) {
+            JSONObject tmpObj = Utils.entity2JSONObject(entity);
+            retList.put(tmpObj);
+        }
+        return retList;
+    }
+
 
     /*
      * Update a user record's properties 

@@ -46,6 +46,11 @@ public final class Constants {
     public static final String USERS_ENTITY_NAME = "Users";
     
     public static final String MOTOCROWD_ENTITY_NAME = "MotoCrowd";
+    public static final String QUESTION_ENTITY_NAME = "Question";
+    
+    public static final String ACCEPTED_STATE_NAME = "Accepted";
+    public static final String ANSWERED_STATE_NAME = "Answered";
+    public static final String OPEN_STATE_NAME = "Open";
     
     //public static final String USER_ENTITY_NAME = "User";
     
