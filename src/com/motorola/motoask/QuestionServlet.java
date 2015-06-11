@@ -1,5 +1,7 @@
 
 package com.motorola.motoask;
+import com.motorola.motoask.qc.QClassification;
+import com.motorola.motoask.qc.QClassifier;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -34,9 +36,6 @@ public class QuestionServlet extends HttpServlet {
    
     //public static final String PARAMETER_DEVINFO = "devInfo"; //JSON string
     
-    
- 
-
     public static  enum Resource {
         question, questions
      }
@@ -166,7 +165,10 @@ public class QuestionServlet extends HttpServlet {
             String userEmail = jsonData.getString(PARAMETER_USER_EMAIL);
             String qInfo = jsonData.getString(PARAMETER_Q);
             String details = jsonData.getString(PARAMETER_Q_DETAILS);
-            String topics = jsonData.getString(PARAMETER_Q_TOPICS);
+            // String topics = jsonData.getString(PARAMETER_Q_TOPICS);
+            QClassifier classer = new QClassifier(qInfo);
+            QClassification classiness = classer.classify();
+            String topics = classiness.getClassification();
             
             QuestionDataEntity questionData =
                     new QuestionDataEntity()
@@ -178,7 +180,7 @@ public class QuestionServlet extends HttpServlet {
 
             OfyService ofyService = OfyService.getInstance();
             ofyService.save(questionData);
-            String qId = questionData.getQuestionId();
+            Long qId = questionData.getQuestionId();
             
             jsonResp.put("success", true);
             jsonResp.put(PARAMETER_QID, qId);
