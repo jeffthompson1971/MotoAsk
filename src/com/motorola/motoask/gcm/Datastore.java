@@ -143,7 +143,7 @@ public final class Datastore {
                
                 entity.setProperty(EMAIL_PROPERTY, email);
                 entity.setProperty(DEVICE_REG_ID_PROPERTY, regId);
-                entity.setProperty(TBD_ID_PROPERTY, tbdId);
+                //entity.setProperty(TBD_ID_PROPERTY, tbdId);
                 entity.setProperty("creationdate", new Date());
 
                 datastore.put(entity);
