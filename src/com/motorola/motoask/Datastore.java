@@ -34,6 +34,7 @@ import com.motorola.motoask.Constants.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Logger;
@@ -51,10 +52,8 @@ public final class Datastore {
 
     static final int MULTICAST_SIZE = 1000;
     private static final String CONFIG_ENTITY_NAME = "Config";
-
+    
     private static final String DEVICE_REG_ID_PROPERTY = "regId";
-
-    //private static final String DEVICE_TRHEEBD_ID_PROPERTY = "tbdId";
 
     private static final String MULTICAST_TYPE = "Multicast";
 
@@ -88,9 +87,6 @@ public final class Datastore {
 
         JSONArray retList = new JSONArray();
 
-        //Filter extSysEqFilter = new FilterPredicate(Constants.EXT_SYS_ACCT_PROP_ID, 
-       //         FilterOperator.EQUAL, sysId.ordinal());
-
         Query query = new Query(Constants.USERS_ENTITY_NAME);
 
         PreparedQuery preparedQuery = datastore.prepare(query);
@@ -98,16 +94,12 @@ public final class Datastore {
         List<Entity> entities = preparedQuery.asList(DEFAULT_FETCH_OPTIONS);
 
         for (Entity entity : entities) {
-
             JSONObject tmpObj = Utils.entity2JSONObject(entity);
             retList.put(tmpObj);
         }
         return retList;
 
     }
-
-
-
     /*
      * Returns a list of all users of the specified external system
      *  used given credentials
@@ -115,71 +107,63 @@ public final class Datastore {
      * @param sysId - id for the external system
      * @return - JSONArray of users.
      */    
-//    public static JSONArray findAllUsers(EXT_SYSTEM sysId) {
-//
-//        logger.info("findAllUsers()");
-//
-//        JSONArray retList = new JSONArray();
-//
-//        Filter extSysEqFilter = new FilterPredicate(Constants.EXT_SYS_ACCT_PROP_ID, 
-//                FilterOperator.EQUAL, sysId.ordinal());
-//
-//        Query query = new Query(Constants.EXT_SYS_ACCT_ENTITY_NAME).setFilter(extSysEqFilter);
-//
-//        PreparedQuery preparedQuery = datastore.prepare(query);
-//
-//        List<Entity> entities = preparedQuery.asList(DEFAULT_FETCH_OPTIONS);
-//
-//        for (Entity entity : entities) {
-//
-//            JSONObject tmpObj = Utils.entity2JSONObject(entity);
-//            retList.put(tmpObj);
-//        }
-//
-//        logger.info("returning users: " + retList.toString());    
-//        return retList;
-//
-//    }
-    
-     
-    /*
-     * Get a list of all the users of an external system that used the given  credentials
-     * @param sysId - id for the external system
-     * @param creds - credentials used base64 encoded ("username:password")
-     * 
-     * @return - JSONArray of users.
-     */
-//    public static JSONArray findAllUsersGivenCreds(EXT_SYSTEM sysId, String creds) {
-//
-//        logger.fine("findAllUsersGivenCreds()");
-//
-//        JSONArray retList = new JSONArray();
-//
-//        Filter extSysEqFilter = new FilterPredicate(Constants.EXT_SYS_ACCT_PROP_ID, 
-//                FilterOperator.EQUAL, sysId.ordinal());
-//        
-//        Filter credEqFilter = new FilterPredicate(Constants.EXT_SYS_ACCT_PROP_CREDS, 
-//                FilterOperator.EQUAL, creds);
-//
-//        Query query = new Query(Constants.EXT_SYS_ACCT_ENTITY_NAME).
-//                setFilter(extSysEqFilter).setFilter(credEqFilter);
-//
-//        PreparedQuery preparedQuery = datastore.prepare(query);
-//
-//        List<Entity> entities = preparedQuery.asList(DEFAULT_FETCH_OPTIONS);
-//
-//        for (Entity entity : entities) {
-//            JSONObject tmpObj = Utils.entity2JSONObject(entity);
-//            //Long id = entity.getKey().getId();
-//            //tmpObj.put("key", id);
-//            retList.put(tmpObj);
-//        }
-//        logger.info("found users: " + retList.toString());
-//        return retList;
-//
-//    }
+    public static JSONArray getMotoSmes(int offset, int records) {
 
+        logger.info("getMotoSmes()");
+
+        JSONArray retList = new JSONArray();
+
+        Query query = new Query(Constants.MOTOCROWD_ENTITY_NAME);
+
+        PreparedQuery preparedQuery = datastore.prepare(query);
+
+        List<Entity> entities = preparedQuery.asList(DEFAULT_FETCH_OPTIONS);
+
+        for (Entity entity : entities) {
+            JSONObject tmpObj = Utils.entity2JSONObject(entity);
+            retList.put(tmpObj);
+        }
+        return retList;
+
+    }
     
+    private static Entity findUserByEmail(String email) {
+        Query query = new Query(Constants.USERS_ENTITY_NAME);
+        Filter equalFilter = new FilterPredicate(UserServlet.PARAMETER_EMAIL, FilterOperator.EQUAL,
+                email);
+        // .addFilter(DEVICE_REG_ID_PROPERTY, FilterOperator.EQUAL, regId);
+        query.setFilter(equalFilter);
+        PreparedQuery preparedQuery = datastore.prepare(query);
+        List<Entity> entities = preparedQuery.asList(DEFAULT_FETCH_OPTIONS);
+        Entity entity = null;
+        if (!entities.isEmpty()) {
+            entity = entities.get(0);
+        }
+        int size = entities.size();
+        if (size > 0) {
+            logger.info("Found " + size + " entities for email " + email + ": " + entities);
+        }
+        return entity;
+    }
+    private static Entity findMotoSmesByEmail(String email) {
+        Query query = new Query(Constants.MOTOCROWD_ENTITY_NAME);
+        Filter equalFilter = new FilterPredicate(UserServlet.PARAMETER_EMAIL, FilterOperator.EQUAL,
+                email);
+        // .addFilter(DEVICE_REG_ID_PROPERTY, FilterOperator.EQUAL, regId);
+        query.setFilter(equalFilter);
+        PreparedQuery preparedQuery = datastore.prepare(query);
+        List<Entity> entities = preparedQuery.asList(DEFAULT_FETCH_OPTIONS);
+        Entity entity = null;
+        if (!entities.isEmpty()) {
+            entity = entities.get(0);
+        }
+        int size = entities.size();
+        if (size > 0) {
+            logger.info("Found " + size + " entities for email " + email + ": " + entities);
+        }
+        return entity;
+    }
+
     /*
      * Update a user record's properties 
      * @param sysId - id for the external system
@@ -187,12 +171,97 @@ public final class Datastore {
      * 
      * @return - JSONArray of users.
      */
-    public static void updateUser(String email, String creds, HashMap<String,String> props) {
+    public static void createMotoSme(String name, String email, JSONArray topics) {
+      
+        logger.info("createMotoSme()");
 
-        logger.info("findAllUsers()");
+        Entity entity = findUserByEmail(email);
+
+        if (entity != null) {
+            logger.info(email + " is already a user ... ignoring.");
+
+        } else {
+
+            Transaction txn = datastore.beginTransaction();
+            try {
+     
+                entity = new Entity(Constants.MOTOCROWD_ENTITY_NAME);
+                entity.setProperty(UserServlet.PARAMETER_NAME, name);
+                entity.setProperty(UserServlet.PARAMETER_EMAIL, email);
+                entity.setProperty(UserServlet.PARAMETER_TOPICS, topics.toString());
+                entity.setProperty("creationdate", new Date());
+
+                datastore.put(entity);
+                txn.commit();
+
+            } finally {
+                if (txn.isActive()) {
+                    txn.rollback();
+                    logger.severe("failed to create user for :" + name);
+                }
+            }
+        }
+    }
+    
+     
+    /*
+     * Update a user record's properties 
+     * @param sysId - id for the external system
+     * @param creds - credentials used base64 encoded ("username:password")
+     * 
+     * @return - JSONArray of users.
+     */
+    public static void createUser(String id, String name, String email, String regId,
+            String imageUrl, String devInfo) {
+      
+        logger.info("createUser()");
+
+        Entity entity = findUserByEmail(email);
+
+        if (entity != null) {
+            logger.info(email + " is already a user ... ignoring.");
+
+        } else {
+
+            Transaction txn = datastore.beginTransaction();
+            try {
+                
+                entity = new Entity(Constants.USERS_ENTITY_NAME);
+                entity.setProperty(UserServlet.PARAMETER_USER_ID, id);
+                entity.setProperty(UserServlet.PARAMETER_NAME, name);
+                entity.setProperty(UserServlet.PARAMETER_EMAIL, email);
+                entity.setProperty(UserServlet.PARAMETER_REG_ID, regId);
+                entity.setProperty(UserServlet.PARAMETER_AVATAR, imageUrl);
+                entity.setProperty(UserServlet.PARAMETER_DEVINFO, devInfo);      
+                entity.setProperty("creationdate", new Date());
+
+                datastore.put(entity);
+                
+                txn.commit();
+
+            } finally {
+                if (txn.isActive()) {
+                    txn.rollback();
+                    logger.severe("failed to create user for :" + name);
+                }
+            }
+        }
+    }
+    
+    
+    /*
+     * Update a user record's properties 
+     * @param email - email for the user
+     * @param creds - credentials used base64 encoded ("username:password")
+     * 
+     * @return - JSONArray of users.
+     */
+    public static void updateUser(String email, HashMap<String,String> props) {
+
+        logger.info("updateUser()");
 
         Transaction txn = datastore.beginTransaction();
-      //  JSONArray names = newConfig.names();
+       
         Entity theConfig = null;
         
         try {
@@ -212,31 +281,16 @@ public final class Datastore {
              
                 theConfig = new Entity(CONFIG_ENTITY_NAME);
             }
-//                 
-//            for (int i = 0, size = names.length(); i < size; i++) {
-//                
-//                String name = names.getString(i);
-//                String value = newConfig.getString(name); 
-//                // set the     
-//                theConfig.setProperty(name, value);
-//
-//                mMyCache.put(name, value);
-//               
-//            }
-            
-           // String test = mMyCache.get(names.getString(0));
-            //logger.info("found value for MODE: " + test);
            
             datastore.put(theConfig);
             txn.commit();
         }
      
         finally {
-                if (txn.isActive()) {
-                    txn.rollback();
-                }
-        }           
-
+            if (txn.isActive()) {
+                txn.rollback();
+            }
+        }
     }
 
     /**
@@ -284,9 +338,9 @@ public final class Datastore {
         }
      
         finally {
-                if (txn.isActive()) {
-                    txn.rollback();
-                }
+            if (txn.isActive()) {
+                txn.rollback();
+            }
         }           
     }
 }

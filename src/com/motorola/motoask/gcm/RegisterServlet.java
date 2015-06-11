@@ -51,17 +51,17 @@ public class RegisterServlet extends BaseServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) {
         JSONObject jsonResp = new JSONObject();
-        String regId, tbdId, email, os;
+        String regId, userId, email, os;
       
         try {
             regId = getParameter(req, PARAMETER_REG_ID);
-            tbdId = getParameter(req, PARAMETER_USER_ID);
+            userId = getParameter(req, PARAMETER_USER_ID);
             email = getParameter(req, PARAMETER_EMAIL);
           
             
            // boolean temp = EnumUtils.isValidEnum(Constants.DEVICE_OS.class, os);
             
-            if (regId == null || tbdId == null || regId.length() == 0 || tbdId.length() == 0
+            if (regId == null || userId == null || regId.length() == 0 || userId.length() == 0
                     || email == null || email.length() == 0){
                 setFail(resp);
                 jsonResp.put("success", false);
@@ -71,11 +71,9 @@ public class RegisterServlet extends BaseServlet {
                 return;
             }
             log.info("registering device for " + email);
-     
-        
-            
-
-        if (Datastore.register(tbdId, email, regId)) {
+           
+          
+        if (Datastore.register(userId, email, regId)) {
             setSuccess(resp);
             jsonResp.put("success", true);
             

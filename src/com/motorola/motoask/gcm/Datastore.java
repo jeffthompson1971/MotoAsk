@@ -143,7 +143,7 @@ public final class Datastore {
                
                 entity.setProperty(EMAIL_PROPERTY, email);
                 entity.setProperty(DEVICE_REG_ID_PROPERTY, regId);
-                entity.setProperty(TBD_ID_PROPERTY, tbdId);
+                //entity.setProperty(TBD_ID_PROPERTY, tbdId);
                 entity.setProperty("creationdate", new Date());
 
                 datastore.put(entity);
@@ -288,12 +288,12 @@ public final class Datastore {
         }
     }
 
-    public synchronized static List<String> getDevicesByTbdId(String tbdId) {
+    public synchronized static List<String> getDevicesByUserId(String userId) {
         List<String> devices;
         Transaction txn = datastore.beginTransaction();
         try {
             Query query = new Query(DEVICE_ENTITY);
-            Filter equalFilter = new FilterPredicate(TBD_ID_PROPERTY, FilterOperator.EQUAL, tbdId);
+            Filter equalFilter = new FilterPredicate(TBD_ID_PROPERTY, FilterOperator.EQUAL, userId);
             query.setFilter(equalFilter);
 
             Iterable<Entity> entities = datastore.prepare(query).asIterable(DEFAULT_FETCH_OPTIONS);
@@ -311,29 +311,6 @@ public final class Datastore {
         return devices;
     }
 
-    public synchronized static List<String> getDevicesByCreds(String creds) {
-        List<String> devices;
-        Transaction txn = datastore.beginTransaction();
-        try {
-            Query query = new Query(DEVICE_ENTITY);
-            Filter equalFilter = new FilterPredicate(Constants.EXT_SYS_ACCT_PROP_CREDS,
-                    FilterOperator.EQUAL, creds);
-            query.setFilter(equalFilter);
-
-            Iterable<Entity> entities = datastore.prepare(query).asIterable(DEFAULT_FETCH_OPTIONS);
-            devices = new ArrayList<String>();
-            for (Entity entity : entities) {
-                String device = (String) entity.getProperty(DEVICE_REG_ID_PROPERTY);
-                devices.add(device);
-            }
-            txn.commit();
-        } finally {
-            if (txn.isActive()) {
-                txn.rollback();
-            }
-        }
-        return devices;
-    }
 
     private static Entity findDeviceByRegId(String regId) {
         Query query = new Query(DEVICE_ENTITY);

@@ -81,26 +81,21 @@ public class SendAllMessagesServlet extends BaseServlet {
         Message msgObj;
 
         // we're not sure which of the following params the request is using.
-        String tbdId = req.getParameter("tbdId");
+        String userId = req.getParameter("userId");
  
-        String creds = req.getParameter("c");
-
+       
         // message is a JSON string with enough data to build a message
         String message = req.getParameter("message");
         
         String messageObj = req.getParameter("message_obj");
         
-        if (tbdId != null && tbdId.length() != 0) {
+        if (userId != null && userId.length() != 0) {
 
-            log.info("request to push to id: " + tbdId);
+            log.info("request to push to id: " + userId);
 
-            devices = Datastore.getDevicesByTbdId(tbdId);
+            devices = Datastore.getDevicesByUserId(userId);
 
-        } else if (creds != null && creds.length() != 0) {
-
-            devices = Datastore.getDevicesByCreds(creds);
-
-        } else
+        }  else
             devices = Datastore.getDevices();
           
         if (messageObj != null && message.length() > 0) {
@@ -137,44 +132,6 @@ public class SendAllMessagesServlet extends BaseServlet {
         }
        
       
-        /*
-         * String status;
-         * 
-         * if (devices.isEmpty()) { status =
-         * "Message ignored as there is no device registered!"; } else { Queue
-         * queue = QueueFactory.getQueue("gcm"); // NOTE: check below is for
-         * demonstration purposes; a real application // could always send a
-         * multicast, even for just one recipient if (devices.size() == 1) { //
-         * send a single message using plain post String device =
-         * devices.get(0); queue.add(withUrl("/send")
-         * .param(SendMessageServlet.PARAMETER_DEVICE, device)
-         * .param(SendMessageServlet.PARAMETER_MESSAGE, message)); status =
-         * "Single message queued for registration id " + device; } else { //
-         * send a multicast message using JSON // must split in chunks of 1000
-         * devices (GCM limit) int total = devices.size(); List<String>
-         * partialDevices = new ArrayList<String>(total); int counter = 0; int
-         * tasks = 0; for (String device : devices) {
-         * 
-         * logger.info(": " + device); counter++; partialDevices.add(device);
-         * logger.info("device: " + device); int partialSize =
-         * partialDevices.size(); if (partialSize == Datastore.MULTICAST_SIZE ||
-         * counter == total) { String multicastKey =
-         * Datastore.createMulticast(partialDevices); logger.info("Queuing " +
-         * partialSize + " devices on multicast man " + multicastKey);
-         * TaskOptions taskOptions = TaskOptions.Builder .withUrl("/send")
-         * .param(SendMessageServlet.PARAMETER_MULTICAST, multicastKey)
-         * .param(SendMessageServlet.PARAMETER_MESSAGE, message)
-         * .method(Method.POST); queue.add(taskOptions); partialDevices.clear();
-         * tasks++;
-         * 
-         * } else {
-         * 
-         * } } status = "Queued tasks to send " + tasks +
-         * " multicast messages to " + total + " devices"; } }
-         * 
-         * req.setAttribute(HomeServlet.ATTRIBUTE_STATUS, status.toString()); //
-         * getServletContext().getRequestDispatcher("/home").forward(req, resp);
-         */
     }
 
 }

@@ -200,15 +200,6 @@ public class Utils {
         return mb.build();
     }
     
-    public static void pushToAllCredUsers(Message msg, 
-            String creds) {
-         JSONObject jsonData = new JSONObject();
-         
-         //Message theMsg = createMessage(title, msg, payload);
-          
-         StringBuilder postParams = new StringBuilder();
-         URL url = null;
-        
-    }
+   
     
 }
