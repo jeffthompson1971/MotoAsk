@@ -9,9 +9,12 @@ import javax.servlet.http.*;
 
 import net.sf.json.JSONObject;
 
+import com.googlecode.objectify.ObjectifyService;
+import com.googlecode.objectify.util.Closeable;
 import com.motorola.motoask.RestRequest;
 import com.motorola.motoask.Utils;
 import com.motorola.motoask.gcm.RegisterServlet;
+import com.motorola.motoask.OfyService;
 
 
 
@@ -28,6 +31,7 @@ public class UserServlet extends HttpServlet {
     public static final String PARAMETER_DEVINFO = "deviceInfo"; //JSON string
     //public static final String PARAMETER_DEVINFO = "devInfo"; //JSON string
     
+    //public final static OfyService ofyService;
     
  
 
@@ -140,7 +144,10 @@ public class UserServlet extends HttpServlet {
      }
    
    
-    //  curl -X POST -d '{"userName":"Wentao Chang","email":"wchang@motorola.com","regId":"APA91bGw9qM1DXFZjBeBsZ9VKm2GoKjG-Gk_2SfB5eqtMta1l3leNV_bjb6wMGjalQYVSVcoLSiojlHqru59OkCNRsNgP3y6FnYsRa98rvijmtUsdDGKLHECgmnCyd0u8f2U638J_j6Av46D4QP4l9itLLVl-nYR1g","imageUrl":"https:\/\/lh6.googleusercontent.com\/-3bzf0-gdsaQ\/AAAAAAAAAAI\/AAAAAAAAAHs\/EzPegZlcVmA\/photo.jpg?sz=50","userId":"114824279230486482278","deviceInfo":{"imei":"NBVV2F0086","device_model":"XT1585","carrier":""}}' localhost:8888/api/v1/users
+     //  curl -X POST -d '{"userName":"Wentao Chang","email":"wchang@motorola.com", "regId":"APA91bGw9qM1DXFZjBeBsZ9VKm2GoKjG-Gk_2SfB5eqtMta1l3leNV_bjb6wMGjalQYVSVcoLSiojlHqru59OkCNRsNgP3y6FnYsRa98rvijmtUsdDGKLHECgmnCyd0u8f2U638J_j6Av46D4QP4l9itLLVl-nYR1g", "imageUrl":"https:\/\/lh6.googleusercontent.com\/-3bzf0-gdsaQ\/AAAAAAAAAAI\/AAAAAAAAAHs\/EzPegZlcVmA\/photo.jpg?sz=50","userId":"114824279230486482278","deviceInfo":{"imei":"NBVV2F0086","device_model":"XT1585","carrier":""}}' localhost:8888/api/v1/users
+    //  curl -X POST -d '{"userName":"Wentao Chang","email":"wchang@motorola.com",
+    //  "regId":"APA91bGw9qM1DXFZjBeBsZ9VKm2GoKjG-Gk_2SfB5eqtMta1l3leNV_bjb6wMGjalQYVSVcoLSiojlHqru59OkCNRsNgP3y6FnYsRa98rvijmtUsdDGKLHECgmnCyd0u8f2U638J_j6Av46D4QP4l9itLLVl-nYR1g",
+    //  "imageUrl":"https:\/\/lh6.googleusercontent.com\/-3bzf0-gdsaQ\/AAAAAAAAAAI\/AAAAAAAAAHs\/EzPegZlcVmA\/photo.jpg?sz=50","userId":"114824279230486482278","deviceInfo":{"imei":"NBVV2F0086","device_model":"XT1585","carrier":""}}' localhost:8888/api/v1/users
     public static JSONObject handlePostToUsers(HttpServletRequest req, HttpServletResponse res) {
 
         JSONObject jsonResp = new JSONObject();
@@ -154,8 +161,9 @@ public class UserServlet extends HttpServlet {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        //String userId = restReq.getId()
-        String id = jsonData.getString(PARAMETER_USER_ID);
+ 
+        String regId = jsonData.getString(PARAMETER_REG_ID);
+        String userId = jsonData.getString(PARAMETER_USER_ID);
         String name = jsonData.getString(PARAMETER_NAME);
         String email = jsonData.getString(PARAMETER_EMAIL);
         String photo = jsonData.getString(PARAMETER_AVATAR);
@@ -164,8 +172,17 @@ public class UserServlet extends HttpServlet {
         
         JSONObject devObj = new JSONObject(devInfo);
         
-        
-        
+        UserDataEntity userData =
+        new UserDataEntity()
+          .setRegId(regId)
+          .setUserId(userId)
+          .setName(name)
+          .setEmail(email)
+          .setImageUrl(photo)
+          .setDeviceInfo(devInfo);
+
+        OfyService ofyService = OfyService.getInstance();
+        ofyService.save(userData);
         // write this to datastore!
         
         
