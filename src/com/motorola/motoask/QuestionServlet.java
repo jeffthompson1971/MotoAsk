@@ -13,6 +13,7 @@ import javax.servlet.http.*;
 
 import net.sf.json.JSONObject;
 
+import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.motorola.motoask.RestRequest;
 import com.motorola.motoask.Utils;

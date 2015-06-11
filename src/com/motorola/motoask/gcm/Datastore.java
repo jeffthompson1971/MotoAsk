@@ -80,7 +80,7 @@ public final class Datastore {
      *            device's registration id.
      */
     public static boolean register(String userId, String email, String regId) {
-        logger.info("Registering device: " + regId + "for user " + email);
+        logger.severe("Registering device: " + regId + "for user " + email);
 
         int osOrdinal = 0;
         boolean success = true;

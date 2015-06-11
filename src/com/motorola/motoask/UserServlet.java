@@ -294,7 +294,7 @@ public class UserServlet extends HttpServlet {
      
     //  curl -X POST -d '{"userName":"Wentao Chang","email":"wchang@motorola.com","regId":"APA91bGw9qM1DXFZjBeBsZ9VKm2GoKjG-Gk_2SfB5eqtMta1l3leNV_bjb6wMGjalQYVSVcoLSiojlHqru59OkCNRsNgP3y6FnYsRa98rvijmtUsdDGKLHECgmnCyd0u8f2U638J_j6Av46D4QP4l9itLLVl-nYR1g","imageUrl":"https:\/\/lh6.googleusercontent.com\/-3bzf0-gdsaQ\/AAAAAAAAAAI\/AAAAAAAAAHs\/EzPegZlcVmA\/photo.jpg?sz=50","userId":"114824279230486482278","deviceInfo":{"imei":"NBVV2F0086","device_model":"XT1585","carrier":""}}' localhost:8888/api/v1/users
     public static JSONObject handlePostToUsers(HttpServletRequest req, HttpServletResponse res) {
-
+        log.severe("handlePostToUsers()");
         JSONObject jsonResp = new JSONObject();
         JSONObject jsonData = new JSONObject();
         
@@ -309,7 +309,7 @@ public class UserServlet extends HttpServlet {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        userStorage.put(jsonData);
+       // userStorage.put(jsonData);
      
        try {
            id = jsonData.getString(PARAMETER_USER_ID);
