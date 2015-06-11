@@ -30,9 +30,10 @@ public final class Constants {
 //    
 //    public static final String OAUTHIO_SECRET_KEY = "AAjpZa473V_MwbESCeRI0sv3tZs";
 //    
-    public static final String API_KEY = "AIzaSyCRjlUu6p-YaUBMyLsD3z_BBhZcS8NCm3k";
-    // 3BD SHIT
-
+   // public static final String API_KEY = "AIzaSyCRjlUu6p-YaUBMyLsD3z_BBhZcS8NCm3k";
+   
+    public static final String API_KEY = "AIzaSyCb7m0g9jzpdIR89ubH_GjYJop2bmX3dIs";
+    
     // Entity names across all packages / servlets
   
      
@@ -49,9 +50,9 @@ public final class Constants {
     
     //public static final String USER_ENTITY_NAME = "User";
     
-//    public static final String SERVICE_ACCT_EMAIL = "22551269451-a45m7e3k36oppondbibmde7phailh2sp@developer.gserviceaccount.com";
+    public static final String SERVICE_ACCT_EMAIL = "566930563926-h65ofam6m6blidcqvcjubus7qj9f4dvf@developer.gserviceaccount.com";
 //    
-//    public static final String SERVICE_ACCT_CLIENT_ID = "22551269451-a45m7e3k36oppondbibmde7phailh2sp.apps.googleusercontent.com";
+    public static final String SERVICE_ACCT_CLIENT_ID = "566930563926-h65ofam6m6blidcqvcjubus7qj9f4dvf.apps.googleusercontent.com";
 //    
 //    public static final String DEV_CERT_FILE_PATH = "OKRPDevelopment.p12";
  

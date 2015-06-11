@@ -3,6 +3,7 @@ package com.motorola.motoask;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
@@ -10,11 +11,12 @@ import javax.servlet.http.*;
 
 import net.sf.json.JSONObject;
 
+import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.motorola.motoask.RestRequest;
 import com.motorola.motoask.Utils;
 import com.motorola.motoask.gcm.RegisterServlet;
-import com.sun.xml.internal.bind.v2.schemagen.xmlschema.List;
+//import com.sun.xml.internal.bind.v2.schemagen.xmlschema.List;
 
 
 

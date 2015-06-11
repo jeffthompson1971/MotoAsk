@@ -15,6 +15,7 @@
  */
 package com.motorola.motoask.gcm;
 
+
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -26,6 +27,8 @@ import java.util.logging.Logger;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+
+import com.motorola.motoask.Constants;
 
 /**
  * Context initializer that loads the API key from the App Engine datastore.
@@ -54,7 +57,7 @@ public class ApiKeyInitializer implements ServletContextListener {
       // it locally.
       entity.setProperty(ACCESS_KEY_FIELD,
          // "replace_this_text_by_your_Simple_API_Access_key");
-              "AIzaSyDsAcyc5WOw0IqvR93VR8cVsWCHJ8ZoDq4");   
+              "AIzaSyCb7m0g9jzpdIR89ubH_GjYJop2bmX3dIs");   
       datastore.put(entity);
       logger.severe("Created fake key. Please go to App Engine admin "
           + "console, change its value to your API Key (the entity "

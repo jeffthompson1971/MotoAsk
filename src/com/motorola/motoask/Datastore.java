@@ -298,8 +298,12 @@ public final class Datastore {
             while (it.hasNext()) {
                 Map.Entry pair = (Map.Entry)it.next();
                 logger.info(pair.getKey() + " = " + pair.getValue());
-                
-                theSme.setProperty((String) pair.getKey(), pair.getValue());
+                String key = (String) pair.getKey();
+                if (key.equals(UserServlet.PARAMETER_NEW_POINTS)) {
+                    int points = Integer.parseInt((String)pair.getValue());
+                    theSme.setProperty(key, points);
+                } else
+                    theSme.setProperty(key, pair.getValue());
 
                 it.remove(); // avoids a ConcurrentModificationException
             }
