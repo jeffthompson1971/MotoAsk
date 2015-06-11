@@ -36,7 +36,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import net.sf.json.JSONArray;
@@ -211,16 +213,19 @@ public final class Datastore {
      * 
      * @return - JSONArray of users.
      */
-    public static void createUser(String id, String name, String email, String regId,
+    public static JSONObject createUser(String id, String name, String email, String regId,
             String imageUrl, String devInfo) {
-      
+        
         logger.info("createUser()");
+        JSONObject jsonResp = new JSONObject();
+        
 
         Entity entity = findUserByEmail(email);
 
         if (entity != null) {
             logger.info(email + " is already a user ... ignoring.");
-
+            jsonResp.put("success", false);
+            jsonResp.put("message", "User already registered.");
         } else {
 
             Transaction txn = datastore.beginTransaction();
@@ -238,16 +243,80 @@ public final class Datastore {
                 datastore.put(entity);
                 
                 txn.commit();
-
+                jsonResp.put("success", true);
+                
             } finally {
                 if (txn.isActive()) {
                     txn.rollback();
                     logger.severe("failed to create user for :" + name);
+                    jsonResp.put("success", false);
+                    jsonResp.put("message", "database failure - failed to create user");
+                    
                 }
             }
         }
+        return jsonResp;
     }
     
+    /*
+     * Update a user record's properties 
+     * @param email - email for the user
+     * @param creds - credentials used base64 encoded ("username:password")
+     * 
+     * @return - JSONArray of users.
+     */
+    public static JSONObject updateMotoSme(String userId, HashMap<String,String> props) {
+
+        logger.info("updateMotoSme()");
+        JSONObject jsonResp = new JSONObject();
+        Transaction txn = datastore.beginTransaction();
+       
+        Entity theSme = null;
+        
+        try {
+          
+            Query query = new Query(Constants.MOTOCROWD_ENTITY_NAME);               
+            
+            PreparedQuery preparedQuery = datastore.prepare(query);
+
+            List<Entity> entities = preparedQuery.asList(DEFAULT_FETCH_OPTIONS);
+          
+            if (!entities.isEmpty()) {
+                theSme = entities.get(0);
+            }
+           
+            // If it doesn't exist, create it...
+            if (theSme == null) {
+                jsonResp.put("success", false);
+                jsonResp.put("message", "sme does not exist");
+                return jsonResp;
+             
+                //theSme = new Entity(CONFIG_ENTITY_NAME);
+            }
+           
+            Iterator it = props.entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry pair = (Map.Entry)it.next();
+                logger.info(pair.getKey() + " = " + pair.getValue());
+                
+                theSme.setProperty((String) pair.getKey(), pair.getValue());
+
+                it.remove(); // avoids a ConcurrentModificationException
+            }
+            theSme.setProperty("userId", userId);
+            
+            datastore.put(theSme);
+            txn.commit();
+            jsonResp.put("success", true);
+        }
+     
+        finally {
+            if (txn.isActive()) {
+                txn.rollback();
+            }
+        }
+        return jsonResp;
+    }
     
     /*
      * Update a user record's properties 

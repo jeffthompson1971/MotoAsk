@@ -55,7 +55,7 @@ public final class Datastore {
     static final int MULTICAST_SIZE = 1000;
     private static final String DEVICE_ENTITY = "Device";
     private static final String DEVICE_REG_ID_PROPERTY = "regId";
-    private static final String TBD_ID_PROPERTY = "tbdId";
+    private static final String ID_PROPERTY = "userId";
     private static final String EMAIL_PROPERTY = "email";
     private static final String OS_PROPERTY = "os";
     // private static final String CREDS_PROPERTY = "c";
@@ -79,7 +79,7 @@ public final class Datastore {
      * @param regId
      *            device's registration id.
      */
-    public static boolean register(String tbdId, String email, String regId) {
+    public static boolean register(String userId, String email, String regId) {
         logger.info("Registering device: " + regId + "for user " + email);
 
         int osOrdinal = 0;
@@ -99,7 +99,7 @@ public final class Datastore {
                
                 entity.setProperty(EMAIL_PROPERTY, email);
                 entity.setProperty(DEVICE_REG_ID_PROPERTY, regId);
-                entity.setProperty(TBD_ID_PROPERTY, tbdId);
+                entity.setProperty(ID_PROPERTY, userId);
                 entity.setProperty("creationdate", new Date());
 
                 datastore.put(entity);
@@ -121,43 +121,43 @@ public final class Datastore {
      * @param regId
      *            device's registration id.
      */
-    public static boolean addUser(String id, String email, String regId, String devInfo, 
-            String photo) {
-        
-        logger.info("Registering device: " + regId + "for user " + email);
-
-        int osOrdinal = 0;
-        boolean success = true;
-        Entity entity = findDeviceByRegId(regId);
-
-        if (entity != null) {
-            logger.info(regId + " is already registered ... ignoring.");
-
-        } else {
-
-            Transaction txn = datastore.beginTransaction();
-            try {
-
-              
-                entity = new Entity(DEVICE_ENTITY);
-               
-                entity.setProperty(EMAIL_PROPERTY, email);
-                entity.setProperty(DEVICE_REG_ID_PROPERTY, regId);
-                //entity.setProperty(TBD_ID_PROPERTY, tbdId);
-                entity.setProperty("creationdate", new Date());
-
-                datastore.put(entity);
-                txn.commit();
-
-            } finally {
-                if (txn.isActive()) {
-                    txn.rollback();
-                    success = false;
-                }
-            }
-        }
-        return success;
-    }
+//    public static boolean addUser(String id, String email, String regId, String devInfo, 
+//            String photo) {
+//        
+//        logger.info("Registering device: " + regId + "for user " + email);
+//
+//        int osOrdinal = 0;
+//        boolean success = true;
+//        Entity entity = findDeviceByRegId(regId);
+//
+//        if (entity != null) {
+//            logger.info(regId + " is already registered ... ignoring.");
+//
+//        } else {
+//
+//            Transaction txn = datastore.beginTransaction();
+//            try {
+//
+//              
+//                entity = new Entity(DEVICE_ENTITY);
+//               
+//                entity.setProperty(EMAIL_PROPERTY, email);
+//                entity.setProperty(DEVICE_REG_ID_PROPERTY, regId);
+//                //entity.setProperty(TBD_ID_PROPERTY, tbdId);
+//                entity.setProperty("creationdate", new Date());
+//
+//                datastore.put(entity);
+//                txn.commit();
+//
+//            } finally {
+//                if (txn.isActive()) {
+//                    txn.rollback();
+//                    success = false;
+//                }
+//            }
+//        }
+//        return success;
+//    }
 
     /**
      * Unregisters a device.
@@ -287,13 +287,12 @@ public final class Datastore {
             }
         }
     }
-
     public synchronized static List<String> getDevicesByUserId(String userId) {
         List<String> devices;
         Transaction txn = datastore.beginTransaction();
         try {
             Query query = new Query(DEVICE_ENTITY);
-            Filter equalFilter = new FilterPredicate(TBD_ID_PROPERTY, FilterOperator.EQUAL, userId);
+            Filter equalFilter = new FilterPredicate(ID_PROPERTY, FilterOperator.EQUAL, userId);
             query.setFilter(equalFilter);
 
             Iterable<Entity> entities = datastore.prepare(query).asIterable(DEFAULT_FETCH_OPTIONS);
@@ -310,6 +309,28 @@ public final class Datastore {
         }
         return devices;
     }
+//    public synchronized static List<String> getDevicesByUserId(String userId) {
+//        List<String> devices;
+//        Transaction txn = datastore.beginTransaction();
+//        try {
+//            Query query = new Query(DEVICE_ENTITY);
+//            Filter equalFilter = new FilterPredicate(TBD_ID_PROPERTY, FilterOperator.EQUAL, userId);
+//            query.setFilter(equalFilter);
+//
+//            Iterable<Entity> entities = datastore.prepare(query).asIterable(DEFAULT_FETCH_OPTIONS);
+//            devices = new ArrayList<String>();
+//            for (Entity entity : entities) {
+//                String device = (String) entity.getProperty(DEVICE_REG_ID_PROPERTY);
+//                devices.add(device);
+//            }
+//            txn.commit();
+//        } finally {
+//            if (txn.isActive()) {
+//                txn.rollback();
+//            }
+//        }
+//        return devices;
+//    }
 
 
     private static Entity findDeviceByRegId(String regId) {

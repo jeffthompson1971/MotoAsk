@@ -1,0 +1,18 @@
+<div ng-controller="ShowingTimeLoginCtrl"> <!--   <div class="container absolute-center login-form"> --> <br> <md-card style="width: 50%; min-width: 500px; text-align: inherit" class="center-me"> <md-whiteframe class="md-whiteframe-z3" layout layout-align="center center"> <span> <md-toolbar class="md-accent"> <h1 class="md-toolbar-tools" style="letter-spacing: .4em">ShowingTime Login</h1> </md-toolbar> <md-content class="md-padding"> <div class="sw-logo"> <img ng-src="/assets/icons/ShowingTime-logo.png" src="/icons/ShowingTime-logo.png" width="200" style="width: 200px !important"></div> <p> Please log in using your credentials for ShowingTime. You will only need to this once! </p> <form style="text-align: inherit" ng-submit="submitLogin(login.username, login.password)"> <md-input-container ng-disabled="false"> <label for="i1">user name</label> <input id="i1" ng-model="login.username"> </md-input-container> <md-input-container ng-disabled="false"> <label for="i2">password</label> <input id="i2" ng-model="login.password"> </md-input-container> <!--   <md-input-cont ng-disabled="false">
+          <label for="i1">user name</label>
+        
+          <md-input id="i1" ng-model="login.username" ></md-input>
+        </md-input-group>
+        
+        <md-input-group ng-disabled="false">
+          <label for="i2">password</label>
+          <md-input id="i2" ng-model="login.password"></md-input>
+        </md-input-group>
+         --> <footer> <md-checkbox ng-model="login.stay" checked label="stay logged in"> stay logged in </md-checkbox> <md-button type="submit" value="Login" class="md-raised md-primary center-me">LOG IN</md-button> <!--  <md-button type="submit" value="Login" class="md-button-raised my-md-button centerme">Log In</md-button> --> </footer> </form> </md-content> <!-- 
+  <super-navigate location="swfinancial#index" ng-click="">  
+
+
+  <md-button class="md-primary md-fab md-fab-bottom-left">
+    <md-icon icon="https://material.angularjs.org/img/icons/ic_photo_24px.svg"></md-icon>
+  </md-button>
+  </super-navigate> --> <!--    </div> --> </span> </md-whiteframe> </md-card> </div>

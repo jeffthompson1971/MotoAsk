@@ -1,27 +1,34 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<!-- The HTML 4.01 Transitional DOCTYPE declaration-->
-<!-- above set at the top of the file will set     -->
-<!-- the browser's rendering engine into           -->
-<!-- "Quirks Mode". Replacing this declaration     -->
-<!-- with a "Standards Mode" doctype is supported, -->
-<!-- but may lead to some differences in layout.   -->
-
-<html>
-  <head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <title>Hello App Engine</title>
-  </head>
-
-  <body>
-    <h1>Hello App Engine!</h1>
-	
-    <table>
-      <tr>
-        <td colspan="2" style="font-weight:bold;">Available Servlets:</td>        
-      </tr>
-      <tr>
-        <td><a href="motoask">MotoAsk</a></td>
-      </tr>
-    </table>
-  </body>
-</html>
+<!doctype html> <html class="no-js"> <head> <meta charset="utf-8"> <title></title> <meta name="description" content=""> <meta name="viewport" content="width=device-width"> <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.min.css"> <!-- Place favicon.ico and apple-touch-icon.png in the root directory --> <link rel="stylesheet" href="styles/vendor.807504c4.css"> <link rel="stylesheet" href="styles/main.0eeba628.css">  <body ng-app="app"> <!--[if lt IE 7]>
+      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+      <![endif]--> <!-- Add your site or application content here --> <div layout="column" layout-fill ng-controller="AppCtrl"> <md-toolbar class="md-tall navbar-gradient-bg"> <div class="md-toolbar-tools"> <img height="100" style="position: absolute; right: 20px; top: 10px" src="/images/moto-logo.6c8cfdf4.png"> <!--  <md-button right class="md-raised md-fab" ng-click="toggleLeft()"> --> <ng-md-icon ng-click="toggleLeft()" icon="{{sidebarIcon}}" style="fill: white" size="42" options="{&quot;rotation&quot;: &quot;counterclock&quot;}"></ng-md-icon> <!--  </md-button> --> </div> </md-toolbar> <section layout="row" flex> <md-sidenav class="my-left-sidenav md-whiteframe-z2" md-is-locked-open="$mdMedia('gt-md')" md-component-id="left"> <!--     <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left"> --> <md-toolbar class="md-accent left-menu-toolbar"> <div class="md-toolbar-tools"> <div ng-hide="userPhoto==undefined" class="circle-photo-frame" style="background-image: url({{userPhoto}})"></div> <div class="left-menu-toolbar-title"> Options</div> </div> </md-toolbar> <md-content class="md-padding" ng-controller="LeftCtrl"> <!--      <p hide show-gt-md>
+                  This sidenav is locked open on your device. To go back to the default behavior, narrow your display.
+                  </p> --> <div> <md-button ui-sref="home" ng-click="close()"> <span class="icon middle"> <ng-md-icon icon="home" style="fill: black" size="22"></ng-md-icon> </span> <span class="middle"> Home </span> </md-button> </div> <br> <!--   <div>
+                  <md-button ui-sref="alerts" ng-click="close()">
+                      Alerts
+                  </md-button>
+                  </div>
+                  
+                  <br/> --> <div> <md-button ui-sref="admin" ng-click="close()"> Admin </md-button> </div> <br> <!--  <div>
+                  <md-button ui-sref="ui" ng-click="close()">
+                      UI
+                  </md-button>
+                  </div> --> <!--  <div>
+                  <md-button ui-sref="agent" ng-click="close()">
+                     About your listings
+                  </md-button>
+               </div> --> <br> <div> <md-button ui-sref="tabs" ng-click="close()"> Dynamic Tabs Sandbox </md-button> </div> <br> </md-content> </md-sidenav> <section class="md-whiteframe-z1" layout-fill> <!--  <md-content ng-view md-scroll-y flex></md-content> --> <div ui-view="content" flex style="height: 500px"> Please wait while we retrieve your user info </div> </section> </section></div> <footer> <p class="text-mute" style="padding:15px">&copy;2015 <a href="http://mpvdesign.ca">Motorola Mobility Inc.</a></p> </footer> <!-- Google Analytics: change UA-XXXXX-X to be your site's ID --> <script>(function(i, s, o, g, r, a, m) {
+             i['GoogleAnalyticsObject'] = r;
+             i[r] = i[r] || function() {
+                 (i[r].q = i[r].q || []).push(arguments)
+             }, i[r].l = 1 * new Date();
+             a = s.createElement(o),
+                 m = s.getElementsByTagName(o)[0];
+             a.async = 1;
+             a.src = g;
+             m.parentNode.insertBefore(a, m)
+         })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+         
+         ga('create', 'UA-XXXXX-X');
+         ga('send', 'pageview');</script> <!--[if lt IE 9]>
+      <script src="scripts/oldieshim.c17b592e.js"></script>
+      <![endif]--> <script src="scripts/vendor.efb1da01.js"></script> <script src="scripts/scripts.12c3e888.js"></script>  

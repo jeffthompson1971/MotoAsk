@@ -1,0 +1,54 @@
+<style>.chipsdemoContactChips md-content.autocomplete {
+  min-height: 250px; }
+.chipsdemoContactChips .md-item-text.compact {
+  padding-top: 8px;
+  padding-bottom: 8px; }
+.chipsdemoContactChips .contact-item {
+  box-sizing: border-box; }
+  .chipsdemoContactChips .contact-item.selected {
+    opacity: 0.5; }
+    .chipsdemoContactChips .contact-item.selected h3 {
+      opacity: 0.5; }
+  .chipsdemoContactChips .contact-item .md-list-item-text {
+    padding: 14px 0; }
+    .chipsdemoContactChips .contact-item .md-list-item-text h3 {
+      margin: 0 !important;
+      padding: 0;
+      line-height: 1.2em !important; }
+    .chipsdemoContactChips .contact-item .md-list-item-text h3, .chipsdemoContactChips .contact-item .md-list-item-text p {
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden; }
+  @media (min-width: 900px) {
+    .chipsdemoContactChips .contact-item {
+      float: left;
+      width: 33%; } }
+.chipsdemoContactChips md-contact-chips {
+  margin-bottom: 10px; }
+.chipsdemoContactChips .md-chips {
+  padding: 5px 0 8px; }
+.chipsdemoContactChips .fixedRows {
+  height: 250px;
+  overflow-y: scroll; }</style> <md-dialog style="width: 600px" aria-label="User White-List "> <md-toolbar class="md-primary"> <div class="md-toolbar-tools"> <md-icon style="margin-right: 10px" md-svg-icon="social:person_add" class="s36" alt="add person"> </md-icon> Add Motorola SME <span flex></span> <md-button class="md-icon-button" aria-label="Close"> <md-icon md-svg-icon="navigation:close" ng-click="close()" class="s36" alt="Close"></md-icon> </md-button> </div> </md-toolbar> <md-content class="md-padding"> <form name="newUserForm" ng-submit="submit()"> <!-- <div layout layout-sm="column">
+            <md-select style="width: 200px" ng-model="newUser.role" placeholder="Role"  >
+               <md-option valud="" ng-value="$index" ng-repeat="opt in roles">{{ opt }}</md-option>
+            </md-select>
+         </div>
+         <div layout layout-sm="column">
+            <md-select ng-model="newUser.officeid" placeholder="Office" required flex>
+               <md-option  ng-value="opt.officeid" ng-repeat="opt in offices">{{ opt.officename }} ({{ opt.officeid }})</md-option>
+            </md-select>
+         </div> --> <div layout="row" layout-align="space-between center" style="margin: 10px"> <div> <md-input-container> <label>First Name</label> <input ng-model="newUser.firstName"> </md-input-container></div> <div> <md-input-container> <label>Last Name</label> <input ng-model="newUser.lastName"> </md-input-container></div> <div><md-input-container> <label>Email (Motorola)</label> <input ng-model="newUser.email"> </md-input-container></div> </div> <!--   <md-input-container>
+            <label>Email</label>
+            <input ng-model="newUser.email" type="email" name="email" placeholder="Facebook or Gmail email only!" required>
+            <div ng-messages="newUser.email.$error">
+               <div ng-message="required">The agent's Facebook or Gmail email is required for single sign-on...</div>
+            </div>
+         </md-input-container> --> <div class="chipsdemoContactChips"> <md-contact-chips ng-model="topics" md-contacts="querySearch($query)" md-contact-name="name" md-contact-image="image" md-contact-email="email" md-require-match filter-selected="filterSelected" placeholder="MotoSME"> </md-contact-chips> <md-list class="fixedRows"> <md-subheader class="md-no-sticky">Approved Topics</md-subheader> <md-list-item class="md-2-line contact-item" ng-repeat="(index, topic) in allTopics" ng-if="topics.indexOf(topic) < 0"> <img ng-src="{{topic.image}}" class="md-avatar" style="border-radius: 0px" alt="{{topic.name}}"> <div class="md-list-item-text compact"> <h3>{{topic.name}}</h3> <p>{{topic.email}}</p> </div> </md-list-item> <md-list-item class="md-2-line contact-item selected" ng-repeat="(index, topic) in topics"> <img ng-src="{{topic.image}}" class="md-avatar" alt="{{topic.name}}"> <h3>{{topic.name}}</h3> <div class="md-list-item-text compact"> <p>{{topic.email}}</p> </div> </md-list-item> </md-list> </div> <!-- 
+         <md-input-container flex>
+            <label>Notes</label>
+            <textarea ng-model="newUser.notes" columns="1" md-maxlength="150"></textarea>
+         </md-input-container> --> <md-button class="md-raised md-primary" type="submit">Submit</md-button> <span ng-show="newUserForm.email.$error.email"> Email is not valid! </span> <!-- 
+            <div ng-messages="newUserForm.email.$error" ng-show="newUserForm.email.$email">
+               <div ng-message="email">That's too short!</div>
+             </div> --> </form> </md-content> </md-dialog>

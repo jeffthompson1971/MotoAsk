@@ -1,0 +1,95 @@
+<div> <!-- This is all the stuff i can show for a listing in showingtime--> <!--
+   Object
+  Agents: Array[1]
+  ApptCenters: Array[3]
+  ApptType: "4"
+  CanAppraise: false
+  CanInspect: false
+  City: "FOX LAKE"
+  Contacts: Array[1]
+  CustomerIds: Array[2]
+  FriendlyMlses: Array[13]
+  HasListingContract: true
+  HasSalesContract: true
+  InHouseStatus: null
+  IsActive: false
+  IsPending: true
+  IsPendingBackupContract: false
+  IsShowable: false
+  Latitude: 42.39767456
+  ListingId: 24162607
+  ListingPrice: "152800"
+  Longitude: -88.17256164
+  MLSCode: "MLSNI"
+  MLSListingId: "08603753"
+  MLSStatus: "PENDING"
+  MlsArea: "Atwater Park"
+  No3rdPartyAppts: false
+  NotesToStaff: "Please call Showing Times at 800-746-9464 for appt. and for one day code if needed"
+  OfficeMLSCode: "MLSNI"
+  OfficeMLSId: "5064"
+  RecordStatus: "1"
+  SchoolDistrict: null
+  State: "Illinois"
+  StreetDirection: null
+  StreetName: "Atwater"
+  StreetNumber: "23"
+  StreetSuffix: "Parkway"
+  Subdivision: "Atwater Park"
+  TempNoteToStaff: ""
+  TempNoteToStaffExpiry: "/Date(-62135596800000)/"
+  Unit: null
+  UnmatchedPhones: Array[0]
+  Wizardized: true
+  ZipCode: "60020"
+
+--> <!--  <md-toolbar class="md-accent">
+        
+    <div class="md-toolbar-tools">
+
+        Your Listings 
+      
+         
+    </div>        
+  </md-toolbar> --> <md-content flex layout="column"> <!--     <md-list flex>
+      <md-item ng-repeat="item in listings"> 
+    
+        <md-item-content ng-click="select(item)">
+            
+            <div class="md-tile-left"> 
+
+              <md-button  ng-click="mapIt()" aria-label="map it">
+
+                <i class="mdi mdi-map-marker md-accent" style="font-size: 24px;"></i>
+
+              </md-button>
+          
+            </div>
+            <div class="md-tile-content">
+              <h3>{{item.StreetNumber}} {{item.StreetName}}</h3>
+              <h3> {{item.City | lowercase | capitalize}}, {{item.State}} {{item.ZipCode}} </h3>
+              <p class="secondary-text">
+                {{item.NotesToStaff}}
+              </p>
+            </div>
+          
+          </md-item-content>
+        
+        <md-divider  ng-if="!$last"></md-divider>
+        
+    
+
+      </md-item>
+     
+    </md-list> --> <md-list> <md-list-item class="md-3-line" ng-repeat="item in listings" ng-click="select(item)"> <!--  <md-item-content ng-click="select(item)"> --> <!--    <div class="md-tile-left"> 
+
+                <md-button  ng-click="mapIt()">
+
+               <i class="mdi mdi-map-marker md-accent" style="font-size: 24px;"></i> 
+            </md-button>
+                   
+            </div> --> <md-icon style="margin-right: 10px" md-svg-icon="maps:place" class="s48" alt="Notify"> </md-icon> <!--  <img src="/icons/map32.png" class="md-avatar" alt="map"/> --> <div class="md-list-item-text"> <h3>{{item.StreetNumber}} {{item.StreetName}}</h3> <h4> {{item.City | lowercase | capitalize}}, {{item.State}} {{item.ZipCode}} </h4> <p> {{item.NotesToStaff}} </p> </div> <!--  </md-item-content> --> <!--   <md-divider  ng-if="!$last"></md-divider> --> <md-divider md-inset></md-divider> </md-list-item> </md-list> </md-content> <div layout="row" layout-sm="column" layout-md="column"> <md-button class="md-fab md-fab-top-right md-accent" ng-click="syncListings()"> <!--  <md-icon icon="http://google.github.io/material-design-icons/notification/svg/ic_sync_48px.svg">
+            </md-icon> --> <ng-md-icon icon="sync" style="fill: white" size="32" options="{&quot;rotation&quot;: &quot;counterclock&quot;, &quot;duration&quot;: &quot;1000&quot;}"></ng-md-icon> </md-button> <!--      <i class="mdi mdi-sync md-accent" style="font-size: 42px;"></i>  -->  <!-- 
+     <md-button class="md-fab md-fab-bottom-right md-accent" ng-click="syncListings()">
+    <md-icon icon="http://google.github.io/material-design-icons/notification/svg/ic_sync_48px.svg"></md-icon>
+  </md-button> --> </div> </div>

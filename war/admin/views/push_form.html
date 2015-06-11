@@ -1,0 +1,12 @@
+<md-dialog style="width: 500px" aria-label="Push a Notification"> <!--  <md-toolbar class="md-primary">
+    <h1 class="md-toolbar-tools">
+     
+
+          
+          <ng-md-icon icon="cloud_upload" style="fill: white; padding-right: 8px;" size="28" options='{"rotation": "counterclock"}'></ng-md-icon> 
+         
+      
+       Push a Message
+    </h1>
+  </md-toolbar>
+ --> <md-toolbar class="md-primary"> <div class="md-toolbar-tools"> <md-icon style="margin-right: 10px" md-svg-icon="communication:textsms" class="s36" alt="Notify"> </md-icon> Send a Notification <span flex></span> <md-button class="md-icon-button" aria-label="Close"> <md-icon md-svg-icon="navigation:close" ng-click="close()" class="s36" alt="Close"></md-icon> </md-button> </div> </md-toolbar> <md-content class="md-padding"> <form name="pushForm" ng-submit="submitPush()"> <div layout layout-sm="column"> <md-input-container flex> Send text to ALL devices associated with: <h2>{{email}}</h2> <label>Message</label> <textarea ng-model="push.message" columns="2" md-maxlength="150" required></textarea> </md-input-container> </div> <br> <md-button ng-disabled="!pushForm.$valid" class="md-raised md-primary" type="submit">Send</md-button> </br></form> </md-content> </md-dialog>

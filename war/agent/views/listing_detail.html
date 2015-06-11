@@ -1,0 +1,30 @@
+<div> <md-content class="center-me" style="width: 50%; min-width: 600px; max-width: 800px;  text-align: inherit"> <md-card> <div style="color: #FFF; width: 100%; background: #000640; border-radius: 6px; padding: 4px"> <img style="width: 125px" ng-src="assets/icons/showingtime-125.png" class="md-card-image"> <span style="float: right; color: #fff">{{theListing.MLSListingId}}</span> </div> <img style="width: 100%; border-radius: 4px; padding: 2px; box-shadow: 1px 1px 1px #ddd" ng-src="{{imgUrl}}"> <md-card-content> <h3 style="text-transform: capitalize">{{theListing.StreetNumber}} {{theListing.StreetName}}<br> {{theListing.City | lowercase | capitalize}}, {{theListing.State}} {{theListing.ZipCode}} </h3> <p style="font-weight: bold"> {{theListing.Agents[0].FirstName}} {{theListing.Agents[0].LastName}} </p> <p> <ul> <li>Total number of appointments: {{summary.appt_total}}</li> <li>Appointments in last 7 days: {{summary.appt_seven_days}}</li> <li>Appointments in last 30 days: {{summary.appt_thirty_days}}</li> <li>Agent previews: {{summary.agent_previews}}</li> <li>Agent inquiries: {{summary.agent_inquiries}}</li> </ul> </p> </md-card-content> </md-card> <!-- <md-card>
+ 
+         <div style="width: 100%; background: #000640; border-radius: 6px; padding: 4px;">
+      <img  ng-src="/showingtime-125.png" >
+     </div>
+     
+  
+ <p>
+      <ul>
+       
+         <li>Some stuff here  {{summary.agent_previews}}</li>
+       
+        <li>Some more stuff here:  {{summary.agent_inquiries}}</li>
+
+      </ul>
+</p>  
+</md-card> --> <md-card> <img style="background-color: #888; width: 125px" ng-src="/assets/icons/SentriLock-logo-125.jpeg"> <md-card-content> <p style="text-align: center"> Do you want to see more data about your showings from SentriLock? <br>Please log in and we'll hook you up! </p> <form ng-submit="sentriLogin(login.sentri.username, login.sentri.password)"> <div layout="column" layout-margin layout-padding layout-align="center center"> <div> <md-input-group ng-disabled="false"> <label for="i1">user name</label> <md-input id="i1" ng-model="login.sentri.username"></md-input> </md-input-group> </div> <div> <md-input-group ng-disabled="false"> <label for="i2">password</label> <md-input id="i2" ng-model="login.sentri.password"></md-input> </md-input-group> </div> </div> <footer> <md-checkbox ng-model="login.sentri.stay" checked label="stay logged in"> stay logged in </md-checkbox> <md-button type="submit" value="Login" class="md-raised my-md-button centerme">LOG IN</md-button> <!--  <md-button type="submit" value="Login" class="md-button-raised my-md-button centerme">Log In</md-button> --> </footer> </form> <!-- <p>
+      <ul>
+        <li>Logged entries in past 7 days:  {{summary.appt_seven_days}}</li>
+
+        <li>Logged entries in past  30 days:  {{summary.appt_thirty_days}}</li>
+
+    
+
+      </ul>
+    </p>   --> </md-card-content> </md-card> <md-card> <a href="http://www.zillow.com"><img style="width: 125px" src="assets/icons/zillow-logo-125.png" alt="Zillow Logo"></a> <md-card-content> <!--  <p>
+        {{item.NotesToStaff}}
+      </p> --> <p> <ul> <li>Logged entries in past 7 days: {{summary.appt_seven_days}}</li> <li>Logged entries in past 30 days: {{summary.appt_thirty_days}}</li> </ul> </p> </md-card-content> </md-card> </md-content> </div> <!-- <md-button class="md-primary md-fab md-fab-bottom-right" ng-click="getListingUpdate()">
+    <md-icon icon="http://google.github.io/material-design-icons/notification/svg/ic_sync_24px.svg"></md-icon>
+  </md-button> -->

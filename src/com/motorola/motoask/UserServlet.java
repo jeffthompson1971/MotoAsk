@@ -2,6 +2,7 @@ package com.motorola.motoask;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
 import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
@@ -30,6 +31,7 @@ public class UserServlet extends HttpServlet {
     public static final String PARAMETER_DEVINFO = "deviceInfo"; //JSON string
     public static final String PARAMETER_MOTOEMP = "moto"; //boolean
     public static final String PARAMETER_TOPICS = "topics"; //boolean
+    public static final String PARAMETER_NEW_POINTS = "newPoints"; //boolean
     
     //public static final String PARAMETER_DEVINFO = "devInfo"; //JSON string
     
@@ -337,6 +339,8 @@ public class UserServlet extends HttpServlet {
        }
        try {
            regId = jsonData.getString(PARAMETER_REG_ID);
+           
+           com.motorola.motoask.gcm.Datastore.register(id, email, regId);
          
        } catch (Exception e) {
            log.severe("missing mandatory param regId");
@@ -365,15 +369,12 @@ public class UserServlet extends HttpServlet {
        // now figure out if this is being created by the admin UI for a motorola SME or not...
        //  we know it's a motorolan if there are topics and if there is no userId
         // write this to datastore wiht the non-null params only of course!
-       if (id == null) {
-           // this would be a motorola user creation...
-           //Datastore.createMotoUser(name, email, topics);
-       } else {
+     
            
-           Datastore.createUser(id, name, email, regId, photo, devInfoStr);
-       }
-       jsonResp.put("success", true);
-       jsonResp.put("message", "user added successfully");
+       jsonResp = Datastore.createUser(id, name, email, regId, photo, devInfoStr);
+       
+       //jsonResp.put("success", true);
+       //jsonResp.put("message", "user added successfully");
       
        return jsonResp;  
     }
@@ -412,15 +413,60 @@ public class UserServlet extends HttpServlet {
         JSONObject jsonResp = new JSONObject();
         JSONObject jsonData = new JSONObject();
         
-        String userId = resource.getId();
+        String id = resource.getId();
         
+        if (id == null) {
+            log.severe("missing mandatory param id");
+            jsonResp.put("success", false);
+            jsonResp.put("message", "missing mandatory param id");   
+            return jsonResp;
+        }
+        String email = null, regId = null, photo = null, newPoints = null;
         
+        HashMap<String,String> props = new HashMap<String,String>();
         try {
             jsonData = Utils.getJsonBody(req);
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+        try {
+            email = jsonData.getString(PARAMETER_EMAIL);
+            props.put(PARAMETER_EMAIL, email);
+            
+        } catch (Exception e) {
+            log.info("don't have email");
+        }
+        
+        try {
+            photo = jsonData.getString(PARAMETER_AVATAR);
+            props.put(PARAMETER_AVATAR, photo);
+          
+        } catch (Exception e) {
+            log.info("don't have photo");
+        }
+        
+        try {
+            newPoints = jsonData.getString(PARAMETER_NEW_POINTS);
+            props.put(PARAMETER_NEW_POINTS, newPoints);
+          
+        } catch (Exception e) {
+            log.info("don't have new points");
+        }
+        
+        try {
+            regId = jsonData.getString(PARAMETER_REG_ID);
+            props.put(PARAMETER_REG_ID, regId);
+            com.motorola.motoask.gcm.Datastore.register(id, email, regId);
+          
+        } catch (Exception e) {
+            log.severe("missing mandatory param regId");
+            jsonResp.put("success", false);
+            jsonResp.put("message", "missing mandatory param regId");        
+            return jsonResp;  
+            
+        }
+        jsonResp = Datastore.updateMotoSme(id, props);
         
         // pull the 
         jsonResp.put("success", true);
