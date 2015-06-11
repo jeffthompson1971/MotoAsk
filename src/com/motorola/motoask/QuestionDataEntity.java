@@ -12,7 +12,7 @@ import com.googlecode.objectify.annotation.Unindex;
 public class QuestionDataEntity {
 	
   @Id
-  private String qId;
+  private Long qId;
   
   @Index
   private String userId;
@@ -23,7 +23,7 @@ public class QuestionDataEntity {
   private String qDetails;
   private String qTopics;
   
-  public QuestionDataEntity setQuestionId(String id){
+  public QuestionDataEntity setQuestionId(Long id){
 	  qId = id;
 	  return this;
   }
@@ -48,7 +48,7 @@ public class QuestionDataEntity {
 	  return this;
   }
   
-  public String getQuestionId(){
+  public Long getQuestionId(){
 	  return qId;
   }
   public String getUserId(){

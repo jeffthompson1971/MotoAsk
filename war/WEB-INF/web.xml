@@ -40,6 +40,14 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
         <servlet-name>UserServlet</servlet-name>
         <url-pattern>/api/v1/*</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>QuestionServlet</servlet-name>
+        <servlet-class>com.motorola.motoask.QuestionServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>QuestionServlet</servlet-name>
+        <url-pattern>/api/v1/*</url-pattern>
+    </servlet-mapping>
     
     
         <!--  STUFF FOR GCM -->
