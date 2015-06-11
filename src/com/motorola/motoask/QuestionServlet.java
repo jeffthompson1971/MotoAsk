@@ -18,6 +18,7 @@ import com.motorola.motoask.gcm.RegisterServlet;
 
 
 
+
 @SuppressWarnings("serial")
 public class QuestionServlet extends HttpServlet {
     
@@ -67,7 +68,7 @@ public class QuestionServlet extends HttpServlet {
                      jsonResp = QuestionServlet.handlePostToQuestions(req, res);
                      break;
                  case question:
-                     jsonResp = QuestionServlet.handlePostEditToQuestions(req, res);
+                     jsonResp = QuestionServlet.handlePostEditToQuestions(req, res, resourceValues);
                 	 break;
              
                  default:
@@ -177,7 +178,7 @@ public class QuestionServlet extends HttpServlet {
 
             OfyService ofyService = OfyService.getInstance();
             ofyService.save(questionData);
-            String qId = questionData.getQuestionId();
+            Long qId = questionData.getQuestionId();
             
             jsonResp.put("success", true);
             jsonResp.put(PARAMETER_QID, qId);
@@ -195,23 +196,40 @@ public class QuestionServlet extends HttpServlet {
         
     }
     
-    public static JSONObject handlePostEditToQuestions(HttpServletRequest req, HttpServletResponse res) {
+    public static JSONObject handlePostEditToQuestions(HttpServletRequest req, HttpServletResponse res, RestRequest resource) {
 
         JSONObject jsonResp = new JSONObject();
         JSONObject jsonData = new JSONObject();
         
         try {
             jsonData = Utils.getJsonBody(req);
-            String qId = jsonData.getString(PARAMETER_QID);
-            String userId = jsonData.getString(PARAMETER_USER_ID);
-            String userEmail = jsonData.getString(PARAMETER_USER_EMAIL);
-            String qInfo = jsonData.getString(PARAMETER_Q);
-            String details = jsonData.getString(PARAMETER_Q_DETAILS);
-            String topics = jsonData.getString(PARAMETER_Q_TOPICS);
+            String qIdString =  resource.getId();
+            String userId = "";
+            String userEmail = "";
+            String qInfo = "";
+            String details = "";
+            String topics = "";
+            
+            if(jsonData.has(PARAMETER_USER_ID)){
+            	userId = jsonData.getString(PARAMETER_USER_ID);
+            }
+            if(jsonData.has(PARAMETER_USER_EMAIL)){
+            	userEmail = jsonData.getString(PARAMETER_USER_EMAIL);
+            }
+            if(jsonData.has(PARAMETER_Q)){
+            	qInfo = jsonData.getString(PARAMETER_Q);
+            }
+            if(jsonData.has(PARAMETER_Q_DETAILS)){
+            	details = jsonData.getString(PARAMETER_Q_DETAILS);
+            }
+            if(jsonData.has(PARAMETER_Q_TOPICS)){
+            	topics = jsonData.getString(PARAMETER_Q_TOPICS);
+            }
             
             jsonResp.put("success", false);
             
-            if(!qId.isEmpty()){
+            if(!qIdString.isEmpty()){
+                Long qId = Long.parseLong(qIdString, 10);
             	OfyService ofyService = OfyService.getInstance();
             	
             	QuestionDataEntity questionData = ofyService.findById(QuestionDataEntity.class, qId);
@@ -262,11 +280,13 @@ public class QuestionServlet extends HttpServlet {
         JSONObject jsonResp = new JSONObject();
         JSONObject jsonData = new JSONObject();
                 
-        String qId = resource.getId();
+        String qIdString = resource.getId();
         try {
             jsonResp.put("success", false);
             
-            if(!qId.isEmpty()){
+            if(!qIdString.isEmpty()){
+                Long qId = Long.parseLong(qIdString, 10);
+
             	OfyService ofyService = OfyService.getInstance();
             	
             	QuestionDataEntity questionData = ofyService.findById(QuestionDataEntity.class, qId);
