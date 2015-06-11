@@ -1,6 +1,7 @@
 package com.motorola.motoask.qc;
 import com.motorola.motoask.Datastore;
 import com.motorola.motoask.Constants;
+import com.motorola.motoask.QuestionServlet;
 
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
@@ -10,8 +11,10 @@ import java.util.Map;
 import java.util.Set;
 
 import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 import com.google.api.services.prediction.*;
+import com.google.gson.Gson;
 import com.google.storage.*;
 
 
@@ -83,8 +86,16 @@ public class QClassifier {
 	}
 	
 	public void trainModel() {
+	   // Remove file first?
 	   JSONArray acceptedQs  = Datastore.getQuestionsInState(Constants.ACCEPTED_STATE_NAME);
-	    
+	   Gson gson = new Gson();
+	   for (int i = 0; i < acceptedQs.length(); i++) {
+		   JSONObject qRecord = acceptedQs.getJSONObject(i);
+		   String q = qRecord.getString(QuestionServlet.PARAMETER_Q);
+		   String qClass = qRecord.getString(QuestionServlet.PARAMETER_Q_TOPICS);
+		   // Write one line at a time? Need Cloud Storage API. 
+	   }
+	   
 	}
 	
 	public static void main( String args[] ){
