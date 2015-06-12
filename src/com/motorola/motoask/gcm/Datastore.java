@@ -94,7 +94,6 @@ public final class Datastore {
             Transaction txn = datastore.beginTransaction();
             try {
 
-              
                 entity = new Entity(DEVICE_ENTITY);
                
                 entity.setProperty(EMAIL_PROPERTY, email);
@@ -115,50 +114,7 @@ public final class Datastore {
         return success;
     }
     
-    /**
-     * Registers a device.
-     * 
-     * @param regId
-     *            device's registration id.
-     */
-//    public static boolean addUser(String id, String email, String regId, String devInfo, 
-//            String photo) {
-//        
-//        logger.info("Registering device: " + regId + "for user " + email);
-//
-//        int osOrdinal = 0;
-//        boolean success = true;
-//        Entity entity = findDeviceByRegId(regId);
-//
-//        if (entity != null) {
-//            logger.info(regId + " is already registered ... ignoring.");
-//
-//        } else {
-//
-//            Transaction txn = datastore.beginTransaction();
-//            try {
-//
-//              
-//                entity = new Entity(DEVICE_ENTITY);
-//               
-//                entity.setProperty(EMAIL_PROPERTY, email);
-//                entity.setProperty(DEVICE_REG_ID_PROPERTY, regId);
-//                //entity.setProperty(TBD_ID_PROPERTY, tbdId);
-//                entity.setProperty("creationdate", new Date());
-//
-//                datastore.put(entity);
-//                txn.commit();
-//
-//            } finally {
-//                if (txn.isActive()) {
-//                    txn.rollback();
-//                    success = false;
-//                }
-//            }
-//        }
-//        return success;
-//    }
-
+ 
     /**
      * Unregisters a device.
      * 

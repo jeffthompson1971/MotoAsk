@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.*;
 
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import com.google.common.collect.Lists;
@@ -50,7 +51,7 @@ public class QuestionServlet extends HttpServlet {
      @Override
      public void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException,
              IOException {
-
+        log.info("************");
          PrintWriter out = res.getWriter();
          JSONObject jsonResp = new JSONObject();
          try {
@@ -77,7 +78,7 @@ public class QuestionServlet extends HttpServlet {
                      break;
              }
 
-             if (!resIsValid) {
+             if (!resIsValid) { 
                  res.setStatus(400);
                  res.resetBuffer();
              }
@@ -185,18 +186,21 @@ public class QuestionServlet extends HttpServlet {
             ofyService.save(questionData);
             Long qId = questionData.getQuestionId();
             
+         
+            //return jsonResp;
+            
             // FIXME: We update the model after every new question.
             // This is really quite silly, but I have the object to do
             // it with here.
             // classer.trainModel(); 
             
-            jsonResp.put("success", true);
+           jsonResp.put("success", true);
             jsonResp.put(PARAMETER_QID, qId);
             jsonResp.put("message", "Question added successfully");
         	OfyService.releaseInstance();
         	log.info("Notifying MotoCrowd with new question!");
-        	notifyMotoCrowd (qId, qInfo, userId );
-
+        	
+            notifyMotoCrowd (qId, qInfo, userId, "AskMoto has a question for you!" );
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -208,20 +212,27 @@ public class QuestionServlet extends HttpServlet {
         return jsonResp;
         
     }
-    private static void notifyMotoCrowd (Long qId, String q, String userId ) {
+    private static void notifyMotoCrowd (Long qId, String q, String userId, String title ) {
         
         JSONObject payload = new JSONObject();
         payload.put("userId", userId);
         payload.put("questionId", qId);
         payload.put("state", 0);
        
+        JSONArray topics = new JSONArray();
+        topics.put("accessories");
+        topics.put("gps");
+        topics.put("camera");
         
         //String messageText = ;
+        List<String> res = Datastore.getMotoSmeDevices(topics);
         
+        List<String> devices =  com.motorola.motoask.gcm.Datastore.getDevices();
         com.motorola.motoask.gcm.server.Message msg = 
-                com.motorola.motoask.gcm.Utils.createMessage("A Question For You!", q, payload);
+                com.motorola.motoask.gcm.Utils.createMessage(title, q, payload);
              
-        //com.motorola.motoask.gcm.Utils.enqueuePush(msg, devices);
+        
+        com.motorola.motoask.gcm.Utils.enqueuePush(msg, devices);
         
         
     }
@@ -233,12 +244,14 @@ public class QuestionServlet extends HttpServlet {
         
         try {
             jsonData = Utils.getJsonBody(req);
+            log.info("handlePostEditToQuestion(): " + jsonData.toString());
             String qIdString =  resource.getId();
             String userId = "";
             String userEmail = "";
             String qInfo = "";
             String details = "";
             String topics = "";
+            String state = "";
             
             if(jsonData.has(PARAMETER_USER_ID)){
             	userId = jsonData.getString(PARAMETER_USER_ID);
@@ -254,6 +267,9 @@ public class QuestionServlet extends HttpServlet {
             }
             if(jsonData.has(PARAMETER_Q_TOPICS)){
             	topics = jsonData.getString(PARAMETER_Q_TOPICS);
+            }
+            if(jsonData.has(PARAMETER_Q_STATE)){
+                state = jsonData.getString(PARAMETER_Q_STATE);
             }
             
             jsonResp.put("success", false);
@@ -281,12 +297,20 @@ public class QuestionServlet extends HttpServlet {
             		if(!topics.isEmpty()){
             			questionData.setQTopics(topics);
             		}
+            		if(!state.isEmpty()){
+                        questionData.setQState(state);
+                        if (state.equals("2")) {
+                            log.info("answer was accepted for question: " + qInfo);
+                            notifyMotoCrowd (qId, qInfo, userId, "Your answer was accepted!");
+                            
+                        }
+                    }
                     
             		ofyService.save(questionData);
             		
                     jsonResp.put("success", true);
                     jsonResp.put(PARAMETER_QID, qId);
-                    jsonResp.put("message", "user edited successfully");
+                    jsonResp.put("message", "question edited successfully");
                 	OfyService.releaseInstance();
 
             	}

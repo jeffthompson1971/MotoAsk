@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.*;
 
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 import com.google.gson.Gson;
@@ -150,7 +151,30 @@ public class AnswerServlets extends HttpServlet {
          return;
 
      }
-   
+     private static void notifyUserOfAnswer (Long qId, String q, String userId, String title ) {
+         
+         JSONObject payload = new JSONObject();
+         payload.put("userId", userId);
+         payload.put("questionId", qId);
+         payload.put("state", 0);
+        
+         JSONArray topics = new JSONArray();
+         topics.put("accessories");
+         topics.put("gps");
+         topics.put("camera");
+         
+         //String messageText = ;
+         List<String> res = Datastore.getMotoSmeDevices(topics);
+         
+         List<String> devices =  com.motorola.motoask.gcm.Datastore.getDevices();
+         com.motorola.motoask.gcm.server.Message msg = 
+                 com.motorola.motoask.gcm.Utils.createMessage(title, q, payload);
+              
+         
+         com.motorola.motoask.gcm.Utils.enqueuePush(msg, devices);
+         
+         
+     }
    
     //  curl -X POST -d '{"userName":"Wentao Chang","email":"wchang@motorola.com","regId":"APA91bGw9qM1DXFZjBeBsZ9VKm2GoKjG-Gk_2SfB5eqtMta1l3leNV_bjb6wMGjalQYVSVcoLSiojlHqru59OkCNRsNgP3y6FnYsRa98rvijmtUsdDGKLHECgmnCyd0u8f2U638J_j6Av46D4QP4l9itLLVl-nYR1g","imageUrl":"https:\/\/lh6.googleusercontent.com\/-3bzf0-gdsaQ\/AAAAAAAAAAI\/AAAAAAAAAHs\/EzPegZlcVmA\/photo.jpg?sz=50","userId":"114824279230486482278","deviceInfo":{"imei":"NBVV2F0086","device_model":"XT1585","carrier":""}}' localhost:8888/api/v1/users
     public static JSONObject handlePostToAnswers(HttpServletRequest req, HttpServletResponse res) {
@@ -174,7 +198,7 @@ public class AnswerServlets extends HttpServlet {
             	      .setQuestionId(qId)
                       .setUserId(userId)
                       .setEmail(userEmail)
-                      .setAInfo(aInfo);
+                      .setAInfo(aInfo); 
 
             OfyService ofyService = OfyService.getInstance();
             ofyService.save(answerData);

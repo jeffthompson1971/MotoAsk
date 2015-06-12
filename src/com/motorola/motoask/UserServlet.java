@@ -60,7 +60,7 @@ public class UserServlet extends HttpServlet {
                      REST_RES_PATTERN,
                      REST_RES_WITH_ID_PATTERN
                      );
-
+            log.info("got here");
              boolean resIsValid = true;
 
              switch (Resource.valueOf(resourceValues.getResource())) {
@@ -379,6 +379,7 @@ public class UserServlet extends HttpServlet {
        return jsonResp;  
     }
     
+    
     //  curl  localhost:8888/api/v1/user/12345
     public static JSONObject handleGetUsers(HttpServletRequest req, HttpServletResponse res) {
 
@@ -428,7 +429,10 @@ public class UserServlet extends HttpServlet {
             jsonData = Utils.getJsonBody(req);
         } catch (IOException e) {
             // TODO Auto-generated catch block
+            jsonResp.put("success", false);
+            jsonResp.put("message", "failed to parse payload");  
             e.printStackTrace();
+            return jsonResp;
         }
         try {
             email = jsonData.getString(PARAMETER_EMAIL);

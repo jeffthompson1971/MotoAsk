@@ -33,12 +33,15 @@ import com.motorola.motoask.Utils;
 import com.motorola.motoask.Constants.*;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import net.sf.json.JSONArray;
@@ -129,35 +132,47 @@ public final class Datastore {
 
     }
     
-    public static List<String> getMotoSmes(JSONArray topics) {
+    public static List<String> getMotoSmeDevices(JSONArray topics) {
         
         List smeList = new ArrayList<String>();
+        
+        List<String> topicList = JSONArray.toList(topics);
+        
+        Set<String> questionTopicSet = new HashSet<>(topicList);
         
         JSONArray allSmes = getMotoSmes(0,0);
         
         JSONObject smeJson = null;
         
-        Iterator smeIt=allSmes.iterator();
-        while (smeIt.hasNext()) {
-          //artifactDeployerEntries.add(populateAndGetEntry((JSONObject)it.next()));
-            smeJson = new JSONObject((String)smeIt.next());
-            JSONArray topicList = new JSONArray((String)smeIt.next());
-          //  String topic = (String)it.next();
-           // smeList.add((String)it.next());
+        // iterate over all our sme to see if any can handle this
+        for (int i = 0; i < allSmes.length(); ++i) {
+            JSONObject rec = allSmes.getJSONObject(i);
+            //int id = rec.getInt("id");
+           // String smeTopics = rec.getString("topics");
+            JSONArray smeTopics = new JSONArray(rec.getString("topics"));
+           
+            //List<String> smeTopicSet = new HashSet<>(JSONArray.toList(smeTopics));
             
-        
-        
-        }
-        
-        
-        Iterator it=topics.iterator();
-        while (it.hasNext()) {
-          //artifactDeployerEntries.add(populateAndGetEntry((JSONObject)it.next()));
-            String topic = (String)it.next();
-           // smeList.add((String)it.next());
+            Set<String> smeTopicSet = new HashSet<>(JSONArray.toList(smeTopics));
             
-        
+            
+            boolean test = questionTopicSet.retainAll(smeTopicSet);
+            logger.info("sme is good for:" + smeTopicSet.toString() );
+            logger.info("question is about:" + questionTopicSet.toString() );
+            
+            
+            if ( questionTopicSet.retainAll(smeTopicSet)) {
+                logger.info("we want this guy!");
+                
+            }
+            // see if there is any intersection of the 2 sets.. if so then this SME is good
+            if (!questionTopicSet.isEmpty()) {
+                logger.info("we want this guy!");
+                
+            }
+
         }
+       
         
         
         return smeList;
@@ -331,23 +346,20 @@ public final class Datastore {
      */
     public static JSONObject updateMotoSme(String userId, String email, HashMap<String,String> props) {
 
-        logger.info("updateMotoSme()");
+        logger.severe("updateMotoSme()");
         JSONObject jsonResp = new JSONObject();
         Transaction txn = datastore.beginTransaction();
-       
+       logger.severe("props: " + props.toString());
         Entity theSme = null;
         
         try {
           
             Query query = new Query(Constants.MOTOCROWD_ENTITY_NAME);    
           
-            if (userId != null) {
-                Filter equalFilter = new FilterPredicate(UserServlet.PARAMETER_USER_ID, FilterOperator.EQUAL, userId);
-                query.setFilter(equalFilter);
-            } else {
+          
                 Filter equalFilter = new FilterPredicate(UserServlet.PARAMETER_EMAIL, FilterOperator.EQUAL, email);
                 query.setFilter(equalFilter);
-            }
+            
        
             PreparedQuery preparedQuery = datastore.prepare(query);
 
@@ -355,12 +367,14 @@ public final class Datastore {
           
             if (!entities.isEmpty()) {
                 theSme = entities.get(0);
+                logger.info("found the entity!");
             }
            
             // If it doesn't exist, create it...
             if (theSme == null) {
                 jsonResp.put("success", false);
                 jsonResp.put("message", "sme does not exist");
+                logger.severe("failed to find the moto dude you want to update");
                 return jsonResp;
              
                 //theSme = new Entity(CONFIG_ENTITY_NAME);
@@ -390,6 +404,7 @@ public final class Datastore {
             if (txn.isActive()) {
                 txn.rollback();
                 jsonResp.put("success", false);
+                logger.severe("rolling back txn");
                 
             }
         }
