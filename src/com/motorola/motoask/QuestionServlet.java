@@ -168,6 +168,7 @@ public class QuestionServlet extends HttpServlet {
             String qInfo = jsonData.getString(PARAMETER_Q);
             String details = jsonData.getString(PARAMETER_Q_DETAILS);
             String topics = jsonData.getString(PARAMETER_Q_TOPICS);
+            String state = "0";
             
             QuestionDataEntity questionData =
                     new QuestionDataEntity()
@@ -175,7 +176,8 @@ public class QuestionServlet extends HttpServlet {
                       .setEmail(userEmail)
                       .setQInfo(qInfo)
                       .setQDetails(details)
-                      .setQTopics(topics);
+                      .setQTopics(topics)
+                      .setQState(state);
 
             OfyService ofyService = OfyService.getInstance();
             ofyService.save(questionData);
@@ -184,6 +186,8 @@ public class QuestionServlet extends HttpServlet {
             jsonResp.put("success", true);
             jsonResp.put(PARAMETER_QID, qId);
             jsonResp.put("message", "user added successfully");
+        	OfyService.releaseInstance();
+
             
         } catch (IOException e) {
             // TODO Auto-generated catch block
@@ -258,6 +262,8 @@ public class QuestionServlet extends HttpServlet {
                     jsonResp.put("success", true);
                     jsonResp.put(PARAMETER_QID, qId);
                     jsonResp.put("message", "user edited successfully");
+                	OfyService.releaseInstance();
+
             	}
             	
             	
@@ -298,6 +304,8 @@ public class QuestionServlet extends HttpServlet {
             	
                 jsonResp.put("success", true);
                 jsonResp.put("item", questionDataString);
+            	OfyService.releaseInstance();
+
             }
             	
             	
@@ -333,6 +341,8 @@ public class QuestionServlet extends HttpServlet {
             jsonResp.put("success", true);
             jsonResp.put("items", questionDataString);
             	
+        	OfyService.releaseInstance();
+
             	
             
         } catch (Exception e) {

@@ -22,6 +22,7 @@ public class QuestionDataEntity {
   private String q;
   private String qDetails;
   private String qTopics;
+  private String qState;
   
   public QuestionDataEntity setQuestionId(Long id){
 	  qId = id;
@@ -47,6 +48,10 @@ public class QuestionDataEntity {
 	  qTopics = topics;
 	  return this;
   }
+  public QuestionDataEntity setQState(String state){
+	  qState = state;
+	  return this;
+  }
   
   public Long getQuestionId(){
 	  return qId;
@@ -65,5 +70,8 @@ public class QuestionDataEntity {
   }
   public String getQTopics(){
 	  return qTopics;
+  }
+  public String getQState(){
+	  return qState;
   }
 }
