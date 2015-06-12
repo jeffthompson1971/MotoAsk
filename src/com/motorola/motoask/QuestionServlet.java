@@ -168,6 +168,7 @@ public class QuestionServlet extends HttpServlet {
             QClassifier classer = new QClassifier(qInfo);
             QClassification classiness = classer.classify();
             String topics = classiness.getClassification();
+            String state = "0";
             
             QuestionDataEntity questionData =
                     new QuestionDataEntity()
@@ -176,7 +177,8 @@ public class QuestionServlet extends HttpServlet {
                       .setQInfo(qInfo)
                       .setQDetails(details)
                       // .setQState(Constants.ACCEPTED_STATE_NAME) // FIXME: Hack to test model training data flow below.
-                      .setQTopics(topics);
+                      .setQTopics(topics)
+                      .setQState(state);
 
             OfyService ofyService = OfyService.getInstance();
             ofyService.save(questionData);
@@ -190,7 +192,7 @@ public class QuestionServlet extends HttpServlet {
             jsonResp.put("success", true);
             jsonResp.put(PARAMETER_QID, qId);
             jsonResp.put("message", "Question added successfully");
-            
+        	OfyService.releaseInstance();
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -264,6 +266,8 @@ public class QuestionServlet extends HttpServlet {
                     jsonResp.put("success", true);
                     jsonResp.put(PARAMETER_QID, qId);
                     jsonResp.put("message", "user edited successfully");
+                	OfyService.releaseInstance();
+
             	}
             	
             	
@@ -304,6 +308,8 @@ public class QuestionServlet extends HttpServlet {
             	
                 jsonResp.put("success", true);
                 jsonResp.put("item", questionDataString);
+            	OfyService.releaseInstance();
+
             }
             	
             	
@@ -339,6 +345,8 @@ public class QuestionServlet extends HttpServlet {
             jsonResp.put("success", true);
             jsonResp.put("items", questionDataString);
             	
+        	OfyService.releaseInstance();
+
             	
             
         } catch (Exception e) {

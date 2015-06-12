@@ -35,11 +35,20 @@ public class OfyService {
 	  public static OfyService getInstance() {
 		if(ofyService == null){
 			ofyService = new OfyService();
-			closeable = ObjectifyService.begin();
 			
-			// need to call closeable.close() when objectify is no longer needed
 		}
+		closeable = ObjectifyService.begin();
+		// need to call closeable.close() when objectify is no longer needed
 	    return ofyService;
+	  }
+	  
+	  public static void releaseInstance() {
+		  if(closeable != null) {
+			  closeable.close();
+			  closeable = null;
+		  }
+			// need to call closeable.close() when objectify is no longer needed
+		  
 	  }
 
 	  /** Return current objectify instance. */
