@@ -16,11 +16,24 @@ import net.sf.json.JSONObject;
 import com.google.api.services.prediction.*;
 import com.google.gson.Gson;
 import com.google.storage.*;
+import com.google.appengine.api.files.AppEngineFile;
+import com.google.appengine.api.files.FileReadChannel;
+import com.google.appengine.api.files.FileService;
+import com.google.appengine.api.files.FileServiceFactory;
+import com.google.appengine.api.files.FileWriteChannel;
+import com.google.appengine.api.files.GSFileOptions.GSFileOptionsBuilder;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.ByteBuffer;
+import java.nio.channels.Channels;
 
 public class QClassifier {
 	String mQuestion;
 	LinkedHashMap<String, Pattern> compRegex;	
+	public static final String BUCKETNAME = "motoask";
+	public static final String FILENAME = "cq_data.txt";		    
 	
 	public QClassifier(String question) {
 		mQuestion = question;
@@ -81,21 +94,49 @@ public class QClassifier {
 	}
 	
 	public void cram(String question, String classification) {
+		// TODO
 		// Update model on the fly (and store training example to file
 		// in Cloud Storage for later use.
 	}
 	
-	public void trainModel() {
-	   // Remove file first?
-	   JSONArray acceptedQs  = Datastore.getQuestionsInState(Constants.ACCEPTED_STATE_NAME);
-	   Gson gson = new Gson();
-	   for (int i = 0; i < acceptedQs.length(); i++) {
-		   JSONObject qRecord = acceptedQs.getJSONObject(i);
-		   String q = qRecord.getString(QuestionServlet.PARAMETER_Q);
-		   String qClass = qRecord.getString(QuestionServlet.PARAMETER_Q_TOPICS);
-		   // Write one line at a time? Need Cloud Storage API. 
-	   }
-	   
+	public void trainModel() throws IOException {
+		FileService fileService = FileServiceFactory.getFileService();
+		GSFileOptionsBuilder optionsBuilder = new GSFileOptionsBuilder()
+		.setBucket(BUCKETNAME)
+		.setKey(FILENAME)
+		.setMimeType("text/html")
+		.setAcl("public_read")
+		.addUserMetadata("myfield1", "my field value");
+		AppEngineFile writableFile =
+				fileService.createNewGSFile(optionsBuilder.build());
+		boolean lock = false;
+		FileWriteChannel writeChannel =
+				fileService.openWriteChannel(writableFile, lock);
+		PrintWriter out = new PrintWriter(Channels.newWriter(writeChannel, "UTF8"));
+		JSONArray acceptedQs  = Datastore.getQuestionsInState(Constants.ACCEPTED_STATE_NAME);
+		Gson gson = new Gson();
+		for (int i = 0; i < acceptedQs.length(); i++) {
+			JSONObject qRecord = acceptedQs.getJSONObject(i);
+			String q = qRecord.getString(QuestionServlet.PARAMETER_Q);
+			String qClass = qRecord.getString(QuestionServlet.PARAMETER_Q_TOPICS);
+			// Write one line at a time? Need Cloud Storage API.
+     		out.println("\"" + qClass + "\",\"" + q + "\"");
+		}
+		// Close without finalizing and save the file path for writing later
+		out.close();
+		String path = writableFile.getFullPath();
+		// Write more to the file in a separate request:
+		writableFile = new AppEngineFile(path);
+		// Lock the file because we intend to finalize it and
+		// no one else should be able to edit it
+		lock = true;
+		writeChannel = fileService.openWriteChannel(writableFile, lock);
+		// This time we write to the channel directly
+		writeChannel.write(ByteBuffer.wrap
+				("And miles to go before I sleep.".getBytes()));
+
+		// Now finalize
+		writeChannel.closeFinally();		
 	}
 	
 	public static void main( String args[] ){

@@ -157,8 +157,6 @@ public class QuestionServlet extends HttpServlet {
         JSONObject jsonResp = new JSONObject();
         JSONObject jsonData = new JSONObject();
         
-        
-   
         try {
             jsonData = Utils.getJsonBody(req);
             //jsonData.getString(PARAMETER_QID);
@@ -177,15 +175,21 @@ public class QuestionServlet extends HttpServlet {
                       .setEmail(userEmail)
                       .setQInfo(qInfo)
                       .setQDetails(details)
+                      // .setQState(Constants.ACCEPTED_STATE_NAME) // FIXME: Hack to test model training data flow below.
                       .setQTopics(topics);
 
             OfyService ofyService = OfyService.getInstance();
             ofyService.save(questionData);
             Long qId = questionData.getQuestionId();
             
+            // FIXME: We update the model after every new question.
+            // This is really quite silly, but I have the object to do
+            // it with here.
+            // classer.trainModel(); 
+            
             jsonResp.put("success", true);
             jsonResp.put(PARAMETER_QID, qId);
-            jsonResp.put("message", "user added successfully");
+            jsonResp.put("message", "Question added successfully");
             
         } catch (IOException e) {
             // TODO Auto-generated catch block
