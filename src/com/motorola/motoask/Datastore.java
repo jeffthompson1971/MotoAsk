@@ -254,6 +254,7 @@ public final class Datastore {
             logger.info(email + " is already a user ... ignoring.");
             jsonResp.put("success", false);
             jsonResp.put("message", "User already registered.");
+            
         } else {
 
             Transaction txn = datastore.beginTransaction();
@@ -293,7 +294,7 @@ public final class Datastore {
      * 
      * @return - JSONArray of users.
      */
-    public static JSONObject updateMotoSme(String userId, HashMap<String,String> props) {
+    public static JSONObject updateMotoSme(String userId, String email, HashMap<String,String> props) {
 
         logger.info("updateMotoSme()");
         JSONObject jsonResp = new JSONObject();
@@ -303,8 +304,16 @@ public final class Datastore {
         
         try {
           
-            Query query = new Query(Constants.MOTOCROWD_ENTITY_NAME);               
-            
+            Query query = new Query(Constants.MOTOCROWD_ENTITY_NAME);    
+          
+            if (userId != null) {
+                Filter equalFilter = new FilterPredicate(UserServlet.PARAMETER_USER_ID, FilterOperator.EQUAL, userId);
+                query.setFilter(equalFilter);
+            } else {
+                Filter equalFilter = new FilterPredicate(UserServlet.PARAMETER_EMAIL, FilterOperator.EQUAL, email);
+                query.setFilter(equalFilter);
+            }
+       
             PreparedQuery preparedQuery = datastore.prepare(query);
 
             List<Entity> entities = preparedQuery.asList(DEFAULT_FETCH_OPTIONS);
@@ -345,6 +354,8 @@ public final class Datastore {
         finally {
             if (txn.isActive()) {
                 txn.rollback();
+                jsonResp.put("success", false);
+                
             }
         }
         return jsonResp;
@@ -357,33 +368,35 @@ public final class Datastore {
      * 
      * @return - JSONArray of users.
      */
-    public static void updateUser(String email, HashMap<String,String> props) {
+    public static void updateUser(String userId, HashMap<String,String> props) {
 
         logger.info("updateUser()");
-
+        JSONObject jsonResp = new JSONObject();
         Transaction txn = datastore.beginTransaction();
        
-        Entity theConfig = null;
+        Entity theUser = null;
         
         try {
           
-            Query query = new Query(CONFIG_ENTITY_NAME);               
-            
+            Query query = new Query(Constants.USERS_ENTITY_NAME);               
+         
+            Filter equalFilter = new FilterPredicate(UserServlet.PARAMETER_USER_ID, FilterOperator.EQUAL, userId);
+            query.setFilter(equalFilter);
+                     
             PreparedQuery preparedQuery = datastore.prepare(query);
-
+            
             List<Entity> entities = preparedQuery.asList(DEFAULT_FETCH_OPTIONS);
           
             if (!entities.isEmpty()) {
-                theConfig = entities.get(0);
+                theUser = entities.get(0);
+                
+            } else {
+                jsonResp.put("success", false);
+                jsonResp.put("message", "Don't have user in datastore: " + userId);
+
             }
            
-            // If it doesn't exist, create it...
-            if (theConfig == null) {
-             
-                theConfig = new Entity(CONFIG_ENTITY_NAME);
-            }
-           
-            datastore.put(theConfig);
+            datastore.put(theUser);
             txn.commit();
         }
      

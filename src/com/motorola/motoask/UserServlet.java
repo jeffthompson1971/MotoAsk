@@ -466,7 +466,7 @@ public class UserServlet extends HttpServlet {
             return jsonResp;  
             
         }
-        jsonResp = Datastore.updateMotoSme(id, props);
+        jsonResp = Datastore.updateMotoSme(id, email, props);
         
         // pull the 
         jsonResp.put("success", true);
