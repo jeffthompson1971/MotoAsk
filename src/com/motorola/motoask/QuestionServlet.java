@@ -19,7 +19,6 @@ import com.google.gson.Gson;
 import com.motorola.motoask.RestRequest;
 import com.motorola.motoask.Utils;
 import com.motorola.motoask.gcm.RegisterServlet;
-import com.threebd.apps.gcm.server.Message;
 
 
 

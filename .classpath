@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
+	<classpathentry exported="true" kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER"/>
 	<classpathentry exported="true" kind="lib" path="lib/json-lib-0.9.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/gson-2.2.4.jar"/>
 	<classpathentry kind="lib" path="lib/commons-beanutils-1.9.2.jar"/>
@@ -14,10 +15,10 @@
 	<classpathentry kind="lib" path="lib/commons-logging-1.2.jar"/>
 	<classpathentry kind="lib" path="lib/ezmorph-0.9.jar"/>
 	<classpathentry kind="lib" path="lib/objectify-5.1.5.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/objectify-5.1.5.jar"/>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry exported="true" kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER"/>
 	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="con" path="com.google.gdt.eclipse.managedapis.MANAGED_API_CONTAINER/prediction-v1.6r52lv1.18.0-rc"/>
-	<classpathentry kind="con" path="com.google.gdt.eclipse.managedapis.MANAGED_API_CONTAINER/storage-v1r35lv1.18.0-rc"/>
+	<classpathentry exported="true" kind="con" path="com.google.gdt.eclipse.managedapis.MANAGED_API_CONTAINER/prediction-v1.6r52lv1.18.0-rc"/>
+	<classpathentry exported="true" kind="con" path="com.google.gdt.eclipse.managedapis.MANAGED_API_CONTAINER/storage-v1r35lv1.18.0-rc"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>
