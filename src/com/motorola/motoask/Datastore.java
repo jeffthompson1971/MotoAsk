@@ -129,6 +129,41 @@ public final class Datastore {
 
     }
     
+    public static List<String> getMotoSmes(JSONArray topics) {
+        
+        List smeList = new ArrayList<String>();
+        
+        JSONArray allSmes = getMotoSmes(0,0);
+        
+        JSONObject smeJson = null;
+        
+        Iterator smeIt=allSmes.iterator();
+        while (smeIt.hasNext()) {
+          //artifactDeployerEntries.add(populateAndGetEntry((JSONObject)it.next()));
+            smeJson = new JSONObject((String)smeIt.next());
+            JSONArray topicList = new JSONArray((String)smeIt.next());
+          //  String topic = (String)it.next();
+           // smeList.add((String)it.next());
+            
+        
+        
+        }
+        
+        
+        Iterator it=topics.iterator();
+        while (it.hasNext()) {
+          //artifactDeployerEntries.add(populateAndGetEntry((JSONObject)it.next()));
+            String topic = (String)it.next();
+           // smeList.add((String)it.next());
+            
+        
+        }
+        
+        
+        return smeList;
+        
+    }
+    
     private static Entity findUserByEmail(String email) {
         Query query = new Query(Constants.USERS_ENTITY_NAME);
         Filter equalFilter = new FilterPredicate(UserServlet.PARAMETER_EMAIL, FilterOperator.EQUAL,
@@ -205,7 +240,7 @@ public final class Datastore {
       
         logger.info("createMotoSme()");
 
-        Entity entity = findUserByEmail(email);
+        Entity entity = findMotoSmesByEmail(email);
 
         if (entity != null) {
             logger.info(email + " is already a user ... ignoring.");

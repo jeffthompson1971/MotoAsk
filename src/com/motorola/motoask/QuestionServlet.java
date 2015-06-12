@@ -4,6 +4,7 @@ package com.motorola.motoask;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
@@ -16,6 +17,7 @@ import com.google.gson.Gson;
 import com.motorola.motoask.RestRequest;
 import com.motorola.motoask.Utils;
 import com.motorola.motoask.gcm.RegisterServlet;
+import com.threebd.apps.gcm.server.Message;
 
 
 
@@ -187,6 +189,9 @@ public class QuestionServlet extends HttpServlet {
             jsonResp.put(PARAMETER_QID, qId);
             jsonResp.put("message", "user added successfully");
         	OfyService.releaseInstance();
+        	
+        	log.info("Notifying MotoCrowd with new question!");
+        	notifyMotoCrowd (qId, qInfo, userId );
 
             
         } catch (IOException e) {
@@ -198,6 +203,23 @@ public class QuestionServlet extends HttpServlet {
         
         
         return jsonResp;
+        
+    }
+    private static void notifyMotoCrowd (Long qId, String q, String userId ) {
+        
+        JSONObject payload = new JSONObject();
+        payload.put("userId", userId);
+        payload.put("questionId", qId);
+        payload.put("state", 0);
+       
+        
+        //String messageText = ;
+        
+        com.motorola.motoask.gcm.server.Message msg = 
+                com.motorola.motoask.gcm.Utils.createMessage("A Question For You!", q, payload);
+             
+        //com.motorola.motoask.gcm.Utils.enqueuePush(msg, devices);
+        
         
     }
     
@@ -355,5 +377,6 @@ public class QuestionServlet extends HttpServlet {
         return jsonResp;
         
     }
+    
 }
 	
