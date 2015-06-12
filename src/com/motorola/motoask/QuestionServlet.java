@@ -1,5 +1,7 @@
 
 package com.motorola.motoask;
+import com.motorola.motoask.qc.QClassification;
+import com.motorola.motoask.qc.QClassifier;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -37,9 +39,6 @@ public class QuestionServlet extends HttpServlet {
    
     //public static final String PARAMETER_DEVINFO = "devInfo"; //JSON string
     
-    
- 
-
     public static  enum Resource {
         question, questions
      }
@@ -160,8 +159,6 @@ public class QuestionServlet extends HttpServlet {
         JSONObject jsonResp = new JSONObject();
         JSONObject jsonData = new JSONObject();
         
-        
-   
         try {
             jsonData = Utils.getJsonBody(req);
             //jsonData.getString(PARAMETER_QID);
@@ -169,7 +166,10 @@ public class QuestionServlet extends HttpServlet {
             String userEmail = jsonData.getString(PARAMETER_USER_EMAIL);
             String qInfo = jsonData.getString(PARAMETER_Q);
             String details = jsonData.getString(PARAMETER_Q_DETAILS);
-            String topics = jsonData.getString(PARAMETER_Q_TOPICS);
+            // String topics = jsonData.getString(PARAMETER_Q_TOPICS);
+            QClassifier classer = new QClassifier(qInfo);
+            QClassification classiness = classer.classify();
+            String topics = classiness.getClassification();
             String state = "0";
             
             QuestionDataEntity questionData =
@@ -178,6 +178,7 @@ public class QuestionServlet extends HttpServlet {
                       .setEmail(userEmail)
                       .setQInfo(qInfo)
                       .setQDetails(details)
+                      // .setQState(Constants.ACCEPTED_STATE_NAME) // FIXME: Hack to test model training data flow below.
                       .setQTopics(topics)
                       .setQState(state);
 
@@ -185,15 +186,18 @@ public class QuestionServlet extends HttpServlet {
             ofyService.save(questionData);
             Long qId = questionData.getQuestionId();
             
+            // FIXME: We update the model after every new question.
+            // This is really quite silly, but I have the object to do
+            // it with here.
+            // classer.trainModel(); 
+            
             jsonResp.put("success", true);
             jsonResp.put(PARAMETER_QID, qId);
-            jsonResp.put("message", "user added successfully");
+            jsonResp.put("message", "Question added successfully");
         	OfyService.releaseInstance();
-        	
         	log.info("Notifying MotoCrowd with new question!");
         	notifyMotoCrowd (qId, qInfo, userId );
 
-            
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
