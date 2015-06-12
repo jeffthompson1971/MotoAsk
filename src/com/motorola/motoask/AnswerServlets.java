@@ -183,6 +183,8 @@ public class AnswerServlets extends HttpServlet {
             jsonResp.put("success", true);
             jsonResp.put(PARAMETER_AID, aId);
             jsonResp.put("message", "user added successfully");
+        	OfyService.releaseInstance();
+
             
         } catch (IOException e) {
             // TODO Auto-generated catch block
@@ -245,6 +247,7 @@ public class AnswerServlets extends HttpServlet {
                     jsonResp.put("message", "answer edited successfully");
             	}
             	
+            	OfyService.releaseInstance();
             	
             }
             
@@ -286,6 +289,8 @@ public class AnswerServlets extends HttpServlet {
             	
                 jsonResp.put("success", true);
                 jsonResp.put("items", answerDataString);
+            	OfyService.releaseInstance();
+
             }
             	
             	
@@ -320,7 +325,8 @@ public class AnswerServlets extends HttpServlet {
         	
             jsonResp.put("success", true);
             jsonResp.put("items", answerDataString);
-            	
+        	OfyService.releaseInstance();
+	
             	
             
         } catch (Exception e) {
